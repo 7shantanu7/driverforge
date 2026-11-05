@@ -1,0 +1,83 @@
+# Reusable: builds every release package and proves each one installs and
+# works on a clean distribution. Called by CI (every push/PR), the nightly
+# build and the release workflow, so a release ships exactly what CI tested.
+name: packages
+
+on:
+  workflow_call:
+    inputs:
+      retention-days:
+        type: number
+        default: 7
+      ref:
+        type: string
+        default: ""
+
+# bash (with -eo pipefail) everywhere, including container jobs, whose
+# default shell is otherwise plain `sh`.
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: package (${{ matrix.preset }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { preset: release, name: deb-amd64, deps: "build package" }
+          - { preset: release-rpm, name: rpm-x86_64, deps: "build package" }
+          - { preset: cross-aarch64, name: deb-arm64, deps: "build package cross" }
+    env:
+      CC: gcc
+      CXX: g++
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+      - name: Install tools
+        run: scripts/ci/install_deps.sh ${{ matrix.deps }}
+      - name: Build, test, package, lint
+        run: scripts/ci/package.sh ${{ matrix.preset }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packages-${{ matrix.name }}
+          path: dist/*
+          retention-days: ${{ inputs.retention-days }}
+          if-no-files-found: error
+
+  install-test:
+    name: install on ${{ matrix.image }}
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { image: "ubuntu:24.04", kind: deb, artifact: packages-deb-amd64 }
+          - { image: "debian:trixie", kind: deb, artifact: packages-deb-amd64 }
+          # Use a Fedora release that is still supported: EOL releases lose
+          # their dnf mirrors and the job would fail for the wrong reason.
+          - { image: "fedora:43", kind: rpm, artifact: packages-rpm-x86_64 }
+    container: ${{ matrix.image }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist
+      # Debug-symbol packages are optional extras; users install the rest.
+      - name: Install packages into the clean container and use them
+        run: |
+          rm -f dist/*.ddeb
+          scripts/ci/install_test.sh dist ${{ matrix.kind }}

@@ -1,0 +1,24 @@
+# Local Jenkins controller with the driverforge pipeline preconfigured
+# (Configuration as Code + Job DSL). Agents run builds inside Dockerfile.dev
+# through the host Docker daemon.
+#
+#   docker compose -f infra/jenkins/docker-compose.yml up --build
+#   open http://localhost:8080   (user: admin, password from JENKINS_ADMIN_PASSWORD)
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      CASC_JENKINS_CONFIG: /var/jenkins_home/casc
+      JENKINS_ADMIN_PASSWORD: ${JENKINS_ADMIN_PASSWORD:?set JENKINS_ADMIN_PASSWORD}
+      REPO_URL: ${REPO_URL:-https://github.com/7shantanu7/driverforge.git}
+      JAVA_OPTS: -Djenkins.install.runSetupWizard=false
+    volumes:
+      - jenkins-home:/var/jenkins_home
+      - ./casc:/var/jenkins_home/casc:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+volumes:
+  jenkins-home:

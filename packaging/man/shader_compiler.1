@@ -1,0 +1,15 @@
+.TH SHADER_COMPILER 1 "" "driverforge" "User Commands"
+.SH NAME
+shader_compiler \- mock GLSL to SPIR-V compiler used by the build
+.SH SYNOPSIS
+.B shader_compiler
+.I input.glsl output.spv
+.br
+.B shader_compiler \-\-version
+.SH DESCRIPTION
+.B shader_compiler
+writes a mock SPIR-V file: a four-byte magic number (MSPV), a format version
+byte, and then the input bytes unchanged. It does not parse GLSL. It exists to
+exercise a real build-time code generation step.
+.SH EXIT STATUS
+0 on success, 1 on an I/O error, 2 on a usage error.

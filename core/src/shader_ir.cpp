@@ -1,5 +1,7 @@
 #include "gpu_core/shader_ir.h"
 
+#include <utility>
+
 namespace gpu_core {
 
 void ShaderIR::AddInstruction(ShaderInstruction instruction) {

@@ -1,0 +1,6 @@
+# ninja log v5
+10	1200	0	core/a.o	1111
+0	3400	0	core/b.o	2222
+3400	3500	0	lib/libx.so.1.0.0	3333
+3400	3500	0	lib/libx.so.1	3333
+0	500	0	core/a.o	4444

@@ -1,0 +1,30 @@
+# Applied only to project targets (see cmake/modules/CompilerWarnings.cmake),
+# never to third-party code. Run with: cmake --workflow --preset tidy
+#
+# Deliberately not enabled:
+#   performance-enum-size   ABI enums stay int-sized on purpose (C ABI).
+#   modernize-use-using     plugin_abi.h is a C header and must use typedef.
+Checks: >
+  -*,
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  cert-err33-c,
+  clang-analyzer-*,
+  concurrency-*,
+  cppcoreguidelines-pro-type-member-init,
+  cppcoreguidelines-special-member-functions,
+  misc-definitions-in-headers,
+  misc-unused-parameters,
+  modernize-use-nullptr,
+  modernize-use-override,
+  performance-*,
+  -performance-enum-size,
+  readability-braces-around-statements,
+  readability-container-size-empty,
+  readability-make-member-function-const,
+  readability-redundant-*
+HeaderFilterRegex: '(core|drivers|shader_compiler|tools)/.*'
+FormatStyle: file
+CheckOptions:
+  - key: cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor
+    value: true

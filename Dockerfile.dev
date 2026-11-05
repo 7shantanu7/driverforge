@@ -1,14 +1,23 @@
+# Development and CI image. The same image runs in GitHub Actions (container
+# parity job), Jenkins (agent { dockerfile }) and GitLab CI, so "works on my
+# machine" and "works in CI" mean the same thing.
+#
+# Pin the base by digest in production (Dependabot keeps it current):
+#   FROM ubuntu:24.04@sha256:<digest>
 FROM ubuntu:24.04
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    g++-12 \
-    clang-16 \
-    cmake \
-    ninja-build \
-    ccache \
-    git \
-    ca-certificates \
+        build-essential g++-12 g++-14 clang-16 clang-18 clang-tidy-18 clang-format-18 \
+        libclang-rt-18-dev cmake ninja-build ccache git ca-certificates curl \
+        libgtest-dev libgmock-dev python3 gcovr abigail-tools \
+        dpkg-dev rpm lintian file shellcheck \
+        g++-aarch64-linux-gnu qemu-user \
     && rm -rf /var/lib/apt/lists/*
+
+ENV CCACHE_DIR=/ccache \
+    CCACHE_MAXSIZE=2G \
+    CCACHE_COMPILERCHECK=content
 
 WORKDIR /workspace

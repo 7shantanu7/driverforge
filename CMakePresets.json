@@ -1,0 +1,527 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "ENABLE_DRIVER_NVK": "ON",
+        "ENABLE_SOFTWARE_RENDERER": "ON"
+      }
+    },
+    {
+      "name": "env-compiler",
+      "hidden": true,
+      "description": "Takes the compiler from $CC/$CXX so one preset serves every CI matrix leg",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "$env{CC}",
+        "CMAKE_CXX_COMPILER": "$env{CXX}"
+      }
+    },
+    {
+      "name": "dev",
+      "displayName": "Developer (Debug, system compiler)",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "ci-debug",
+      "displayName": "CI Debug ($CC/$CXX)",
+      "inherits": [
+        "base",
+        "env-compiler"
+      ],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "ci-release",
+      "displayName": "CI Release ($CC/$CXX)",
+      "inherits": [
+        "base",
+        "env-compiler"
+      ],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "asan",
+      "displayName": "AddressSanitizer + UndefinedBehaviorSanitizer",
+      "inherits": [
+        "base",
+        "env-compiler"
+      ],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "DRIVERFORGE_SANITIZE": "address,undefined"
+      }
+    },
+    {
+      "name": "tsan",
+      "displayName": "ThreadSanitizer",
+      "inherits": [
+        "base",
+        "env-compiler"
+      ],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "DRIVERFORGE_SANITIZE": "thread"
+      }
+    },
+    {
+      "name": "coverage",
+      "displayName": "Coverage (gcov, for gcovr)",
+      "inherits": [
+        "base",
+        "env-compiler"
+      ],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "DRIVERFORGE_COVERAGE": "ON",
+        "DRIVERFORGE_COMPILER_CACHE": "none"
+      }
+    },
+    {
+      "name": "tidy",
+      "displayName": "clang-tidy on every project target",
+      "inherits": [
+        "base",
+        "env-compiler"
+      ],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "DRIVERFORGE_CLANG_TIDY": "ON"
+      }
+    },
+    {
+      "name": "release",
+      "displayName": "Release packaging (RelWithDebInfo, -dbgsym packages)",
+      "inherits": [
+        "base",
+        "env-compiler"
+      ],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_INSTALL_PREFIX": "/usr",
+        "DRIVERFORGE_GIT_SHA": "$env{DRIVERFORGE_GIT_SHA}"
+      }
+    },
+    {
+      "name": "release-rpm",
+      "displayName": "Release packaging for RPM distros (lib64 layout)",
+      "inherits": "release",
+      "cacheVariables": {
+        "CMAKE_INSTALL_LIBDIR": "lib64"
+      }
+    },
+    {
+      "name": "abi",
+      "displayName": "ABI check build (RelWithDebInfo, absolute debug paths for libabigail)",
+      "inherits": [
+        "base",
+        "env-compiler"
+      ],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "BUILD_TESTING": "OFF",
+        "DRIVERFORGE_COMPILER_CACHE": "none",
+        "DRIVERFORGE_REPRODUCIBLE": "OFF"
+      }
+    },
+    {
+      "name": "cross-aarch64",
+      "displayName": "Cross-compile for aarch64 (tests under qemu)",
+      "inherits": "base",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/aarch64-linux-gnu.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_INSTALL_PREFIX": "/usr",
+        "DRIVERFORGE_GIT_SHA": "$env{DRIVERFORGE_GIT_SHA}",
+        "CMAKE_INSTALL_LIBDIR": "lib/aarch64-linux-gnu"
+      }
+    },
+    {
+      "name": "cuda",
+      "displayName": "CUDA backend (needs nvcc; arch list from $CUDA_ARCHS)",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "ENABLE_CUDA": "ON",
+        "CMAKE_CUDA_ARCHITECTURES": "$env{CUDA_ARCHS}"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "dev",
+      "configurePreset": "dev"
+    },
+    {
+      "name": "ci-debug",
+      "configurePreset": "ci-debug"
+    },
+    {
+      "name": "ci-release",
+      "configurePreset": "ci-release"
+    },
+    {
+      "name": "asan",
+      "configurePreset": "asan"
+    },
+    {
+      "name": "tsan",
+      "configurePreset": "tsan"
+    },
+    {
+      "name": "coverage",
+      "configurePreset": "coverage"
+    },
+    {
+      "name": "tidy",
+      "configurePreset": "tidy"
+    },
+    {
+      "name": "release",
+      "configurePreset": "release"
+    },
+    {
+      "name": "release-rpm",
+      "configurePreset": "release-rpm"
+    },
+    {
+      "name": "abi",
+      "configurePreset": "abi"
+    },
+    {
+      "name": "cross-aarch64",
+      "configurePreset": "cross-aarch64"
+    },
+    {
+      "name": "cuda",
+      "configurePreset": "cuda"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": false,
+        "timeout": 300
+      },
+      "filter": {
+        "exclude": {
+          "label": "quarantined"
+        }
+      }
+    },
+    {
+      "name": "dev",
+      "inherits": "base",
+      "configurePreset": "dev"
+    },
+    {
+      "name": "ci-debug",
+      "inherits": "base",
+      "configurePreset": "ci-debug"
+    },
+    {
+      "name": "ci-release",
+      "inherits": "base",
+      "configurePreset": "ci-release"
+    },
+    {
+      "name": "asan",
+      "inherits": "base",
+      "configurePreset": "asan",
+      "environment": {
+        "ASAN_OPTIONS": "halt_on_error=1:abort_on_error=1:detect_leaks=1:strict_string_checks=1",
+        "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+      }
+    },
+    {
+      "name": "tsan",
+      "inherits": "base",
+      "configurePreset": "tsan",
+      "environment": {
+        "TSAN_OPTIONS": "halt_on_error=1:second_deadlock_stack=1"
+      }
+    },
+    {
+      "name": "coverage",
+      "inherits": "base",
+      "configurePreset": "coverage"
+    },
+    {
+      "name": "release",
+      "inherits": "base",
+      "configurePreset": "release"
+    },
+    {
+      "name": "release-rpm",
+      "inherits": "base",
+      "configurePreset": "release-rpm"
+    },
+    {
+      "name": "cross-aarch64",
+      "inherits": "base",
+      "configurePreset": "cross-aarch64"
+    },
+    {
+      "name": "cuda",
+      "inherits": "base",
+      "configurePreset": "cuda"
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "release",
+      "configurePreset": "release",
+      "generators": [
+        "DEB",
+        "TGZ"
+      ]
+    },
+    {
+      "name": "release-rpm",
+      "configurePreset": "release-rpm",
+      "generators": [
+        "RPM"
+      ]
+    },
+    {
+      "name": "cross-aarch64",
+      "configurePreset": "cross-aarch64",
+      "generators": [
+        "DEB",
+        "TGZ"
+      ]
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "dev",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "dev"
+        },
+        {
+          "type": "build",
+          "name": "dev"
+        },
+        {
+          "type": "test",
+          "name": "dev"
+        }
+      ]
+    },
+    {
+      "name": "ci-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-debug"
+        },
+        {
+          "type": "build",
+          "name": "ci-debug"
+        },
+        {
+          "type": "test",
+          "name": "ci-debug"
+        }
+      ]
+    },
+    {
+      "name": "ci-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ci-release"
+        },
+        {
+          "type": "build",
+          "name": "ci-release"
+        },
+        {
+          "type": "test",
+          "name": "ci-release"
+        }
+      ]
+    },
+    {
+      "name": "asan",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "asan"
+        },
+        {
+          "type": "build",
+          "name": "asan"
+        },
+        {
+          "type": "test",
+          "name": "asan"
+        }
+      ]
+    },
+    {
+      "name": "tsan",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "tsan"
+        },
+        {
+          "type": "build",
+          "name": "tsan"
+        },
+        {
+          "type": "test",
+          "name": "tsan"
+        }
+      ]
+    },
+    {
+      "name": "coverage",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "coverage"
+        },
+        {
+          "type": "build",
+          "name": "coverage"
+        },
+        {
+          "type": "test",
+          "name": "coverage"
+        }
+      ]
+    },
+    {
+      "name": "tidy",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "tidy"
+        },
+        {
+          "type": "build",
+          "name": "tidy"
+        }
+      ]
+    },
+    {
+      "name": "abi",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "abi"
+        },
+        {
+          "type": "build",
+          "name": "abi"
+        }
+      ]
+    },
+    {
+      "name": "cuda",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "cuda"
+        },
+        {
+          "type": "build",
+          "name": "cuda"
+        },
+        {
+          "type": "test",
+          "name": "cuda"
+        }
+      ]
+    },
+    {
+      "name": "release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "release"
+        },
+        {
+          "type": "build",
+          "name": "release"
+        },
+        {
+          "type": "test",
+          "name": "release"
+        },
+        {
+          "type": "package",
+          "name": "release"
+        }
+      ]
+    },
+    {
+      "name": "release-rpm",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "release-rpm"
+        },
+        {
+          "type": "build",
+          "name": "release-rpm"
+        },
+        {
+          "type": "test",
+          "name": "release-rpm"
+        },
+        {
+          "type": "package",
+          "name": "release-rpm"
+        }
+      ]
+    },
+    {
+      "name": "cross-aarch64",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "cross-aarch64"
+        },
+        {
+          "type": "build",
+          "name": "cross-aarch64"
+        },
+        {
+          "type": "test",
+          "name": "cross-aarch64"
+        },
+        {
+          "type": "package",
+          "name": "cross-aarch64"
+        }
+      ]
+    }
+  ]
+}

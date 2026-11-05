@@ -1,0 +1,20 @@
+# Autoscaling pool for general CI jobs. Scales to zero when idle, so it only
+# costs money while jobs run. Each job gets a fresh, ephemeral pod.
+runnerScaleSetName: arc-cpu
+githubConfigSecret: github-config
+minRunners: 0
+maxRunners: 10
+
+# Docker-in-Docker sidecar, so jobs using `container:` and docker builds work.
+containerMode:
+  type: dind
+
+template:
+  spec:
+    containers:
+      - name: runner
+        image: ghcr.io/actions/actions-runner:latest
+        command: ["/home/runner/run.sh"]
+        resources:
+          requests: { cpu: "4", memory: 8Gi }
+          limits: { cpu: "8", memory: 16Gi }

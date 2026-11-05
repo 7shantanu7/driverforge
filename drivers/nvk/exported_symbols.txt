@@ -1,0 +1,4 @@
+# Exact set of dynamic symbols libnvk_driver may export. CI fails if the
+# built library exports anything else (or is missing one of these).
+gpu_core_plugin_get_api
+gpu_core_plugin_negotiate_abi_version

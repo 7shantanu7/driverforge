@@ -1,0 +1,11 @@
+option(DRIVERFORGE_COVERAGE "Instrument project code for gcov/llvm-cov coverage" OFF)
+
+if(DRIVERFORGE_COVERAGE)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        add_compile_options("$<$<COMPILE_LANGUAGE:C,CXX>:--coverage;-O0;-g>")
+        add_link_options(--coverage)
+        message(STATUS "Coverage instrumentation enabled")
+    else()
+        message(FATAL_ERROR "DRIVERFORGE_COVERAGE needs GCC or Clang")
+    endif()
+endif()

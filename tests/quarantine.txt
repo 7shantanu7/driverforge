@@ -1,0 +1,7 @@
+# Known-flaky tests, one CTest test name per line. Quarantined tests are
+# skipped by the blocking PR pipeline (ctest -LE quarantined) but still run
+# in the nightly flaky-test job, so they get fixed instead of forgotten.
+# Every entry must link to a tracking issue. Keep this list empty.
+#
+# Example:
+# SubmissionQueueTest.SomeFlakyCase   # https://github.com/7shantanu7/driverforge/issues/NN

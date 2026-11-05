@@ -1,0 +1,9 @@
+configuration-as-code
+job-dsl
+workflow-aggregator
+pipeline-model-definition
+docker-workflow
+git
+junit
+timestamper
+ws-cleanup

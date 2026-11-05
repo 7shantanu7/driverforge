@@ -1,0 +1,34 @@
+jenkins:
+  systemMessage: "driverforge build farm (configured as code)"
+  numExecutors: 2
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: admin
+          password: ${JENKINS_ADMIN_PASSWORD}
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+unclassified:
+  location:
+    url: http://localhost:8080/
+jobs:
+  - script: >
+      multibranchPipelineJob('driverforge') {
+        branchSources {
+          git {
+            id('driverforge')
+            remote(System.getenv('REPO_URL'))
+          }
+        }
+        factory {
+          workflowBranchProjectFactory { scriptPath('Jenkinsfile') }
+        }
+        orphanedItemStrategy {
+          discardOldItems { numToKeep(10) }
+        }
+        triggers {
+          periodicFolderTrigger { interval('5m') }
+        }
+      }

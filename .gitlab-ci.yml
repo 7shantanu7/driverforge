@@ -1,0 +1,121 @@
+# GitLab CI equivalent of .github/workflows/ci.yml. Same scripts, same
+# presets, same dev image: the pipeline logic lives in scripts/ci/, so each
+# CI system is a thin wrapper and switching systems is cheap.
+stages: [lint, build, quality, package]
+
+variables:
+  # Built and pushed by .github/workflows/dev-image.yml (or the job below).
+  DEV_IMAGE: ghcr.io/7shantanu7/driverforge/dev:latest
+  CCACHE_DIR: $CI_PROJECT_DIR/.ccache
+  DRIVERFORGE_GIT_SHA: $CI_COMMIT_SHA
+
+default:
+  image: $DEV_IMAGE
+  interruptible: true
+  cache:
+    key: ccache-$CI_JOB_NAME_SLUG
+    paths: [.ccache/]
+    # Only the default and release branches write the cache (see workflow
+    # rules); merge requests only read it, so they cannot poison it.
+    policy: $CACHE_POLICY
+  retry:
+    max: 1
+    when: [runner_system_failure, stuck_or_timeout_failure]
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      variables: { CACHE_POLICY: pull }
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH =~ /^release\//
+      variables: { CACHE_POLICY: pull-push }
+    - if: $CI_COMMIT_TAG
+      variables: { CACHE_POLICY: pull }
+
+lint:
+  stage: lint
+  script:
+    - CLANG_FORMAT=clang-format-18 scripts/check_format.sh
+    - shellcheck scripts/*.sh scripts/ci/*.sh infra/k8s/arc/*.sh
+    - cd tools/buildstats && python3 -m unittest discover -s tests -t .
+
+build:
+  stage: build
+  parallel:
+    matrix:
+      - COMPILER: [gcc-12, gcc-14, clang-16, clang-18]
+        BUILD_TYPE: [debug, release]
+  script:
+    - export CC=$COMPILER
+    - export CXX=$(echo "$COMPILER" | sed 's/^gcc/g++/; s/^clang/clang++/')
+    - scripts/ci/build_and_test.sh ci-$BUILD_TYPE
+  artifacts:
+    when: always
+    reports:
+      junit: build/ci-$BUILD_TYPE/junit.xml
+    paths: [build/ci-$BUILD_TYPE/metrics.json]
+    expire_in: 2 weeks
+
+sanitizers:
+  stage: quality
+  needs: []
+  parallel:
+    matrix:
+      - PRESET: [asan, tsan]
+  variables: { CC: clang-18, CXX: clang++-18 }
+  script:
+    - scripts/ci/build_and_test.sh $PRESET
+
+abi:
+  stage: quality
+  needs: []
+  variables: { CC: gcc-12, CXX: g++-12 }
+  script:
+    - cmake --workflow --preset abi
+    - scripts/check_abi.sh build/abi/drivers/nvk/libnvk_driver.so.1.0.0
+
+reproducible:
+  stage: quality
+  needs: []
+  variables: { CC: gcc, CXX: g++ }
+  script:
+    - scripts/check_reproducible.sh "$CI_PROJECT_DIR/repro"
+
+coverage:
+  stage: quality
+  needs: []
+  variables: { CC: gcc, CXX: g++ }
+  script:
+    - scripts/ci/build_and_test.sh coverage
+    - gcovr build/coverage --cobertura coverage.xml
+  coverage: '/^lines: (\d+\.\d+)%/'
+  artifacts:
+    reports:
+      coverage_report: { coverage_format: cobertura, path: coverage.xml }
+
+package:
+  stage: package
+  needs: [build]
+  variables: { CC: gcc, CXX: g++ }
+  parallel:
+    matrix:
+      - PRESET: [release, release-rpm, cross-aarch64]
+  script:
+    - scripts/ci/package.sh $PRESET
+  artifacts:
+    paths: [dist/]
+    expire_in: 2 weeks
+
+install-test:deb:
+  stage: package
+  needs: ["package: [release]"]
+  image: ubuntu:24.04
+  script:
+    - rm -f dist/*.ddeb
+    - scripts/ci/install_test.sh dist deb
+
+install-test:rpm:
+  stage: package
+  needs: ["package: [release-rpm]"]
+  image: fedora:43
+  script:
+    - scripts/ci/install_test.sh dist rpm

@@ -1,0 +1,6 @@
+@PKG@ (@VERSION@-1) unstable; urgency=medium
+
+  * Release @VERSION@. See CHANGELOG.md in the source repository for the
+    full list of changes.
+
+ -- @MAINTAINER@  @DATE@

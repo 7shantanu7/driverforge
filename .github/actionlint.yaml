@@ -1,0 +1,5 @@
+self-hosted-runner:
+  # Autoscaling runner pools from infra/k8s/arc.
+  labels:
+    - arc-cpu
+    - arc-gpu

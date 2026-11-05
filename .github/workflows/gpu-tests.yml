@@ -1,0 +1,46 @@
+# Runs the CUDA tests on a real GPU, using the self-hosted `arc-gpu` runner
+# pool from infra/k8s/arc. Manual only: GitHub-hosted runners have no GPU,
+# and a required job waiting for a runner that is not there would block CI.
+name: gpu-tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      cuda_archs:
+        description: "CMAKE_CUDA_ARCHITECTURES for this run"
+        default: "80;90"
+
+# bash (with -eo pipefail) everywhere, including container jobs, whose
+# default shell is otherwise plain `sh`.
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  gpu:
+    runs-on: arc-gpu
+    timeout-minutes: 30
+    container:
+      image: nvidia/cuda:12.6.3-devel-ubuntu24.04
+      options: --gpus all
+    env:
+      CUDA_ARCHS: ${{ inputs.cuda_archs }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build tools
+        run: |
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
+            cmake ninja-build g++ libgtest-dev python3 git
+      - run: nvidia-smi
+      # On a GPU node the device test must RUN, not skip.
+      - name: Build and test on the GPU
+        run: |
+          scripts/ci/build_and_test.sh cuda
+          if grep -q 'status="notrun"' build/cuda/junit.xml; then
+            echo "::error::a CUDA test was skipped on a GPU runner"
+            exit 1
+          fi

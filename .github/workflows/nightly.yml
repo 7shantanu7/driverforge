@@ -1,0 +1,92 @@
+# Nightly: the expensive checks that would slow every PR down.
+#   * flaky-test hunt: the whole suite 25x, shuffled and parallel,
+#     INCLUDING quarantined tests
+#   * cold (no cache) build to track true build cost over time, compared
+#     against the previous night to catch build-time regressions
+#   * nightly packages with short retention, for anyone who wants to test
+#     main before a release
+name: nightly
+
+on:
+  schedule:
+    - cron: "17 3 * * *"   # 03:17 UTC, off the top of the hour
+  workflow_dispatch:
+
+# bash (with -eo pipefail) everywhere, including container jobs, whose
+# default shell is otherwise plain `sh`.
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  flaky-hunt:
+    name: flaky-test hunt (25 runs)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      CC: clang-18
+      CXX: clang++-18
+    steps:
+      - uses: actions/checkout@v4
+      - run: scripts/ci/install_deps.sh build clang-18
+      - name: Build
+        run: |
+          cmake --preset ci-debug
+          cmake --build --preset ci-debug
+      - name: Run the suite 25 times and report unstable tests
+        run: scripts/ci/flaky_hunt.sh build/ci-debug 25
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flaky-hunt
+          path: build/ci-debug/flaky-hunt/
+          retention-days: 14
+
+  build-time:
+    name: cold build metrics
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      CC: gcc
+      CXX: g++
+    steps:
+      - uses: actions/checkout@v4
+      - run: scripts/ci/install_deps.sh build
+      - name: Cold build (compiler cache disabled)
+        run: |
+          cmake --preset ci-release -DDRIVERFORGE_COMPILER_CACHE=none
+          cmake --build --preset ci-release
+          ctest --preset ci-release --output-junit "$PWD/build/ci-release/junit.xml"
+          PYTHONPATH=tools/buildstats python3 -m buildstats collect build/ci-release \
+            --label nightly-cold --junit build/ci-release/junit.xml --no-ccache -o metrics.json
+          PYTHONPATH=tools/buildstats python3 -m buildstats markdown metrics.json >> "$GITHUB_STEP_SUMMARY"
+      - name: Restore previous night's metrics
+        uses: actions/cache/restore@v4
+        with:
+          path: baseline-metrics.json
+          key: nightly-metrics-${{ github.run_id }}
+          restore-keys: nightly-metrics-
+      - name: Compare with previous night (fails on >25% compile-time growth)
+        run: PYTHONPATH=tools/buildstats python3 -m buildstats compare baseline-metrics.json metrics.json
+      - name: Store tonight's metrics as the next baseline
+        if: success()
+        run: cp metrics.json baseline-metrics.json
+      - if: success()
+        uses: actions/cache/save@v4
+        with:
+          path: baseline-metrics.json
+          key: nightly-metrics-${{ github.run_id }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nightly-metrics
+          path: metrics.json
+          retention-days: 90
+
+  packages:
+    name: nightly packages
+    uses: ./.github/workflows/packages.yml
+    with:
+      retention-days: 7
