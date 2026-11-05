@@ -1,0 +1,151 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  NVK_DRIVER_VERSION: "0.1.0"
+
+jobs:
+  build-and-test:
+    name: build (${{ matrix.compiler }}, ${{ matrix.build_type }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc-12, clang-16]
+        build_type: [Debug, Release]
+        include:
+          - compiler: gcc-12
+            cc: gcc-12
+            cxx: g++-12
+          - compiler: clang-16
+            cc: clang-16
+            cxx: clang++-16
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            ninja-build ccache ${{ matrix.cc }} ${{ matrix.cxx }}
+
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: ccache-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ matrix.compiler }}-${{ matrix.build_type }}-
+
+      - name: Configure
+        run: |
+          cmake -G Ninja -B build \
+            -DCMAKE_C_COMPILER=${{ matrix.cc }} \
+            -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+            -DENABLE_DRIVER_NVK=ON \
+            -DENABLE_SOFTWARE_RENDERER=ON
+        # Note: no -DCMAKE_CXX_COMPILER_LAUNCHER=ccache here — the project's
+        # own CMakeLists.txt auto-detects and enables ccache itself now.
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Report build times
+        run: ./scripts/report_build_times.sh build
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+      # Confirms the add_custom_command build-time codegen step actually ran
+      # and produced a real artifact, not just that shader_compiler compiled.
+      - name: Verify shader build artifact
+        run: |
+          test -f build/shader_compiler/triangle.spv
+          head -c4 build/shader_compiler/triangle.spv | grep -q MSPV
+
+  sanitize:
+    name: sanitizers (ASan+UBSan, clang-16, Debug)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ninja-build clang-16
+
+      - name: Configure
+        run: |
+          cmake -G Ninja -B build-sanitize \
+            -DCMAKE_C_COMPILER=clang-16 \
+            -DCMAKE_CXX_COMPILER=clang++-16 \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer -g" \
+            -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined" \
+            -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=address,undefined" \
+            -DENABLE_DRIVER_NVK=ON \
+            -DENABLE_SOFTWARE_RENDERER=ON
+
+      - name: Build
+        run: cmake --build build-sanitize
+
+      - name: Test under sanitizers
+        env:
+          ASAN_OPTIONS: halt_on_error=1:abort_on_error=1
+          UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+        run: ctest --test-dir build-sanitize --output-on-failure
+
+  package-nvk-driver:
+    name: package nvk_driver artifact
+    needs: build-and-test
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ninja-build gcc-12 g++-12
+
+      - name: Configure (Release, driver only)
+        run: |
+          cmake -G Ninja -B build \
+            -DCMAKE_C_COMPILER=gcc-12 \
+            -DCMAKE_CXX_COMPILER=g++-12 \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DENABLE_DRIVER_NVK=ON \
+            -DENABLE_SOFTWARE_RENDERER=OFF \
+            -DBUILD_TESTING=OFF
+
+      - name: Build nvk_driver
+        run: cmake --build build --target nvk_driver
+
+      # Packages the driver as its own artifact, independent of the rest of
+      # the build — mirrors how a real driver ships on its own release
+      # cadence, separate from any host application.
+      - name: Package versioned artifact
+        run: |
+          PKG_NAME="nvk_driver-${NVK_DRIVER_VERSION}-linux-x86_64-${GITHUB_SHA::8}"
+          mkdir -p "$PKG_NAME/lib"
+          cp -a build/drivers/nvk/libnvk_driver.so* "$PKG_NAME/lib/"
+          cp -a drivers/nvk/include "$PKG_NAME/include"
+          tar -czf "${PKG_NAME}.tar.gz" "$PKG_NAME"
+          echo "PKG_NAME=$PKG_NAME" >> "$GITHUB_ENV"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PKG_NAME }}
+          path: ${{ env.PKG_NAME }}.tar.gz
+          retention-days: 30
