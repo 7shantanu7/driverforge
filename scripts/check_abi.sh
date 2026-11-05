@@ -17,7 +17,7 @@
 #   * the change really is compatible (e.g. a member appended to the end):
 #     regenerate the baseline with --update in the same PR, so a reviewer
 #     sees and approves the ABI diff;
-#   * the change is breaking: bump GPU_STACK_PLUGIN_SOVERSION and
+#   * the change is breaking: bump DRIVERFORGE_PLUGIN_SOVERSION and
 #     GPU_CORE_PLUGIN_ABI_VERSION. The new SONAME has no baseline yet, so
 #     this script then demands one, which again makes the break explicit.
 set -euo pipefail
@@ -79,7 +79,7 @@ if (( status & 12 )); then
     echo >&2
     echo "If the change is backward compatible (e.g. a struct member appended at the end)," >&2
     echo "record it for review in this PR:   scripts/check_abi.sh $LIB --update" >&2
-    echo "If it breaks existing plugins, bump GPU_STACK_PLUGIN_SOVERSION (CMakeLists.txt)" >&2
+    echo "If it breaks existing plugins, bump DRIVERFORGE_PLUGIN_SOVERSION (CMakeLists.txt)" >&2
     echo "and GPU_CORE_PLUGIN_ABI_VERSION (plugin_abi.h), then record the new baseline." >&2
     exit 1
 fi

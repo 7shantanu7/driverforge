@@ -5,9 +5,9 @@ stages: [lint, build, quality, package]
 
 variables:
   # Built and pushed by .github/workflows/dev-image.yml (or the job below).
-  DEV_IMAGE: ghcr.io/7shantanu7/cicd/dev:latest
+  DEV_IMAGE: ghcr.io/7shantanu7/driverforge/dev:latest
   CCACHE_DIR: $CI_PROJECT_DIR/.ccache
-  GPU_STACK_GIT_SHA: $CI_COMMIT_SHA
+  DRIVERFORGE_GIT_SHA: $CI_COMMIT_SHA
 
 default:
   image: $DEV_IMAGE

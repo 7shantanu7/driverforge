@@ -19,7 +19,7 @@ mkdir -p "$WORK"
 # Timestamps come from the commit, not the clock.
 SOURCE_DATE_EPOCH="$(git -C "$ROOT" log -1 --format=%ct)"
 export SOURCE_DATE_EPOCH
-export GPU_STACK_GIT_SHA="${GPU_STACK_GIT_SHA:-$(git -C "$ROOT" rev-parse --short=12 HEAD)}"
+export DRIVERFORGE_GIT_SHA="${DRIVERFORGE_GIT_SHA:-$(git -C "$ROOT" rev-parse --short=12 HEAD)}"
 
 build_once() {
     local name="$1"
@@ -30,8 +30,8 @@ build_once() {
         -DCMAKE_BUILD_TYPE=RelWithDebInfo \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DBUILD_TESTING=OFF \
-        -DGPU_STACK_COMPILER_CACHE=none \
-        -DGPU_STACK_GIT_SHA="$GPU_STACK_GIT_SHA" >/dev/null
+        -DDRIVERFORGE_COMPILER_CACHE=none \
+        -DDRIVERFORGE_GIT_SHA="$DRIVERFORGE_GIT_SHA" >/dev/null
     cmake --build "$build" >/dev/null
     DESTDIR="$stage" cmake --install "$build" >/dev/null
     (cd "$build" && cpack -G DEB >/dev/null 2>&1)

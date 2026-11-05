@@ -12,7 +12,7 @@ Compilation results are cached, so unchanged files are not rebuilt.
 | otherwise, if ccache is installed | ccache (local disk) |
 | neither | none |
 
-Override with `-DGPU_STACK_COMPILER_CACHE=ccache|sccache|none`, or with an
+Override with `-DDRIVERFORGE_COMPILER_CACHE=ccache|sccache|none`, or with an
 explicit `-DCMAKE_CXX_COMPILER_LAUNCHER=...`.
 
 ## GitHub Actions

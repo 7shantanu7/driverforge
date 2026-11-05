@@ -19,7 +19,7 @@ pipeline {
 
     environment {
         CCACHE_DIR = '/ccache'
-        GPU_STACK_GIT_SHA = "${env.GIT_COMMIT ?: 'unknown'}"
+        DRIVERFORGE_GIT_SHA = "${env.GIT_COMMIT ?: 'unknown'}"
     }
 
     stages {

@@ -2,7 +2,7 @@
 # Installs the built packages into a CLEAN system (run it inside a fresh
 # ubuntu/debian/fedora container) and proves they work there:
 #   1. the package manager accepts them and resolves their dependencies
-#   2. the installed gpu-stack-info finds and loads the installed plugin
+#   2. the installed driverforge-info finds and loads the installed plugin
 #   3. a downstream project builds against the installed -dev package
 #      with find_package() and loads both the shipped plugin and its own
 #
@@ -27,14 +27,14 @@ case "$KIND" in
         mapfile -t pkgs < <(realpath "${pkgs[@]}")
         $SUDO apt-get install -y -qq --no-install-recommends "${pkgs[@]}"
         $SUDO apt-get install -y -qq --no-install-recommends cmake ninja-build g++ gcc
-        dpkg -L gpu-driver-stack | sed 's/^/  /'
+        dpkg -L driverforge | sed 's/^/  /'
         ;;
     rpm)
         pkgs=("$DIST"/*.rpm)
         [[ ${#pkgs[@]} -gt 0 ]] || { echo "no .rpm files in $DIST" >&2; exit 1; }
         $SUDO dnf install -y -q "${pkgs[@]}"
         $SUDO dnf install -y -q cmake ninja-build gcc-c++ gcc
-        rpm -ql gpu-driver-stack | sed 's/^/  /'
+        rpm -ql driverforge | sed 's/^/  /'
         ;;
     *)
         echo "unknown package kind '$KIND' (expected deb or rpm)" >&2
@@ -43,8 +43,8 @@ case "$KIND" in
 esac
 
 echo "--- installed host tool"
-gpu-stack-info --version
-gpu-stack-info --require-plugin
+driverforge-info --version
+driverforge-info --require-plugin
 shader_compiler --version
 
 echo "--- downstream consumer against the installed SDK"

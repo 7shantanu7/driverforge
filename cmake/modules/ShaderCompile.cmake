@@ -1,14 +1,14 @@
-# gpu_stack_compile_shaders(<target> OUTPUT_DIR <dir> SOURCES <files...>)
+# driverforge_compile_shaders(<target> OUTPUT_DIR <dir> SOURCES <files...>)
 #
 # Creates <target>, which runs our own just-built shader_compiler over every
 # source at build time. DEPENDS on the shader_compiler target is what forces
 # "build the tool" before "run the tool": CMake does not infer that ordering
 # on its own for custom commands. When cross-compiling, CMake prefixes the
 # tool with CMAKE_CROSSCOMPILING_EMULATOR (qemu), so this still works.
-function(gpu_stack_compile_shaders target)
+function(driverforge_compile_shaders target)
     cmake_parse_arguments(ARG "" "OUTPUT_DIR" "SOURCES" ${ARGN})
     if(NOT ARG_SOURCES)
-        message(FATAL_ERROR "gpu_stack_compile_shaders(${target}) needs SOURCES")
+        message(FATAL_ERROR "driverforge_compile_shaders(${target}) needs SOURCES")
     endif()
 
     set(_outputs "")
@@ -28,5 +28,5 @@ function(gpu_stack_compile_shaders target)
     endforeach()
 
     add_custom_target(${target} ALL DEPENDS ${_outputs})
-    set_target_properties(${target} PROPERTIES GPU_STACK_SHADER_OUTPUTS "${_outputs}")
+    set_target_properties(${target} PROPERTIES DRIVERFORGE_SHADER_OUTPUTS "${_outputs}")
 endfunction()

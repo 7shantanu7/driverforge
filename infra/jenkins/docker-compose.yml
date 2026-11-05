@@ -1,4 +1,4 @@
-# Local Jenkins controller with the gpu_driver_stack pipeline preconfigured
+# Local Jenkins controller with the driverforge pipeline preconfigured
 # (Configuration as Code + Job DSL). Agents run builds inside Dockerfile.dev
 # through the host Docker daemon.
 #
@@ -14,7 +14,7 @@ services:
     environment:
       CASC_JENKINS_CONFIG: /var/jenkins_home/casc
       JENKINS_ADMIN_PASSWORD: ${JENKINS_ADMIN_PASSWORD:?set JENKINS_ADMIN_PASSWORD}
-      REPO_URL: ${REPO_URL:-https://github.com/7shantanu7/CICD.git}
+      REPO_URL: ${REPO_URL:-https://github.com/7shantanu7/driverforge.git}
       JAVA_OPTS: -Djenkins.install.runSetupWizard=false
     volumes:
       - jenkins-home:/var/jenkins_home

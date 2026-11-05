@@ -17,12 +17,12 @@ First release with a committed plugin ABI (plugin SOVERSION 1).
 - C plugin ABI (`gpu_core/plugin_abi.h`) with Vulkan-style version
   negotiation, and `gpu_core::LoadedPlugin`, which validates a plugin before
   calling into it.
-- `gpu-stack-info` host tool that discovers, loads and reports driver plugins,
+- `driverforge-info` host tool that discovers, loads and reports driver plugins,
   falling back to the software rasterizer.
 - Thread-safe `SubmissionQueue`, exercised by the ThreadSanitizer job.
 - Optional CUDA backend (`-DENABLE_CUDA=ON`), built in CI for several CUDA
   versions and GPU architectures, with a fat-binary architecture check.
-- Install rules, `find_package(gpu_driver_stack)` support, and `.deb`, `.rpm`
+- Install rules, `find_package(driverforge)` support, and `.deb`, `.rpm`
   and tarball packages split into runtime, `-dev` and `-tools`.
 - CMake presets for every build flavour (dev, CI, sanitizers, coverage,
   clang-tidy, ABI, release, aarch64 cross, CUDA).
@@ -36,6 +36,11 @@ First release with a committed plugin ABI (plugin SOVERSION 1).
 
 ### Changed
 
+- The project is now called **driverforge** (previously `gpu_driver_stack`):
+  CMake package `find_package(driverforge)`, targets `driverforge::*`,
+  packages `driverforge`, `driverforge-dev` and `driverforge-tools`, and the
+  host tool `driverforge-info`. The plugin C ABI (`gpu_core_plugin_*`) and the
+  `gpu_core` library keep their names.
 - **Breaking:** the driver plugin now exports only the two C entry points of
   the plugin ABI, instead of C++ classes. Plugins built against 0.1.0 do not
   load. This is why the plugin SOVERSION moved from 0 to 1.

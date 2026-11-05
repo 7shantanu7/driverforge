@@ -1,6 +1,6 @@
 # Local Jenkins
 
-Runs a Jenkins controller with the `gpu-driver-stack` multibranch pipeline
+Runs a Jenkins controller with the `driverforge` multibranch pipeline
 already configured (Configuration as Code and Job DSL, no clicking through
 the setup wizard). The pipeline itself is the repository's `Jenkinsfile`.
 

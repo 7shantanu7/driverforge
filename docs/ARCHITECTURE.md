@@ -6,7 +6,7 @@ decisions are recorded as ADRs in [adr/](adr/).
 ## Principles
 
 1. **One source of truth per fact.** The release version is in `VERSION`.
-   The plugin ABI version is in `plugin_abi.h` and `GPU_STACK_PLUGIN_SOVERSION`.
+   The plugin ABI version is in `plugin_abi.h` and `DRIVERFORGE_PLUGIN_SOVERSION`.
    Package names are set once in `CMakeLists.txt`. Build flavours are
    defined once in `CMakePresets.json`.
 2. **CI is a thin wrapper.** Every CI system calls `scripts/ci/*.sh` and
@@ -29,7 +29,7 @@ flowchart TD
     cmake --> abi["plugin_abi (INTERFACE)"]
     abi --> nvk["nvk_driver (MODULE)<br/>version script, SONAME"]
     core --> sw["software_rasterizer (STATIC)"]
-    core --> info["gpu-stack-info"]
+    core --> info["driverforge-info"]
     sw --> info
     sc["shader_compiler"] --> spv["*.spv (custom command)"]
     core --> tests["tests/"]
@@ -46,7 +46,7 @@ Key build-system techniques:
 | Linker version script for the plugin | The plugin exports exactly two symbols; enforced by a test |
 | `-Wl,-z,defs` on the plugin | A plugin with unresolved symbols fails at link time, not at `dlopen` time |
 | `BUILD_INTERFACE` / `INSTALL_INTERFACE` | One target definition works from the build tree and from an installed package |
-| `SameMajorVersion` package version file | `find_package(gpu_driver_stack 1.0)` accepts 1.x and refuses 2.0 |
+| `SameMajorVersion` package version file | `find_package(driverforge 1.0)` accepts 1.x and refuses 2.0 |
 | Separate export set for tools | The `-dev` package never references a binary only `-tools` installs |
 | `$ORIGIN`-relative RPATH and plugin path | The tarball can be unpacked anywhere and still finds its plugin |
 | `-ffile-prefix-map` + `SOURCE_DATE_EPOCH` | Bit-for-bit reproducible binaries and packages |
@@ -61,7 +61,7 @@ Key build-system techniques:
 | Concurrency | `SubmissionQueueTest.ConcurrentProducersLoseNothing` under TSan | No data races in the queue |
 | Error paths | `test_plugin_{future_abi,missing_symbol,null_table}` | The loader rejects bad plugins cleanly |
 | ABI | `CAbiHeaderCompilesAsC`, `NvkDriverExportedSymbols`, libabigail job | The C ABI is valid C, minimal and stable |
-| Integration | `NvkDriverPluginSmokeTest`, `GpuStackInfo*` | The real plugin loads from C and from the host tool |
+| Integration | `NvkDriverPluginSmokeTest`, `DriverforgeInfo*` | The real plugin loads from C and from the host tool |
 | Install | `InstallForConsumerTest` + `DownstreamConsumerBuild` | The installed SDK is consumable with `find_package` |
 | Package | `scripts/ci/install_test.sh` on Ubuntu, Debian, Fedora | Packages install and work on clean systems |
 | Codegen | `ShaderArtifactsGenerated` | The build-time code generation step really ran |

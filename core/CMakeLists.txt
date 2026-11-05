@@ -8,7 +8,7 @@ add_library(gpu_core
     src/submission_queue.cpp
     src/version.cpp
 )
-add_library(gpu_driver_stack::gpu_core ALIAS gpu_core)
+add_library(driverforge::gpu_core ALIAS gpu_core)
 
 set(GPU_CORE_GENERATED_DIR ${CMAKE_CURRENT_BINARY_DIR}/generated)
 
@@ -49,12 +49,12 @@ set_target_properties(gpu_core PROPERTIES
     EXPORT_NAME gpu_core
 )
 
-gpu_driver_stack_enable_warnings(gpu_core)
+driverforge_enable_warnings(gpu_core)
 
 # Header-only target for people writing driver plugins. A plugin needs
 # nothing but the C ABI header, never gpu_core itself.
 add_library(plugin_abi INTERFACE)
-add_library(gpu_driver_stack::plugin_abi ALIAS plugin_abi)
+add_library(driverforge::plugin_abi ALIAS plugin_abi)
 target_include_directories(plugin_abi INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>

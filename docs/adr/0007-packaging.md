@@ -4,14 +4,14 @@
 
 ## Decision
 
-- **Three components, three packages:** runtime (`gpu-driver-stack`), SDK
-  (`gpu-driver-stack-dev`, or `-devel` for RPM) and tools
-  (`gpu-driver-stack-tools`). Users who run the stack never install headers
+- **Three components, three packages:** runtime (`driverforge`), SDK
+  (`driverforge-dev`, or `-devel` for RPM) and tools
+  (`driverforge-tools`). Users who run the stack never install headers
   or the shader compiler.
 - **Debug symbols are split out** into `-dbgsym` packages (Debian), so
   shipped binaries are stripped but crashes can still be symbolised.
 - **Plugins live in a private directory**
-  (`<libdir>/gpu_driver_stack/`), because they are loaded with `dlopen`
+  (`<libdir>/driverforge/`), because they are loaded with `dlopen`
   and never linked against.
 - **Native layouts:** the `.deb` uses the Debian multiarch libdir, and the
   `.rpm` is built by a separate preset with the Fedora `lib64` layout.

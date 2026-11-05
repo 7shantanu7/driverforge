@@ -20,7 +20,7 @@ sha256sum --check --ignore-missing SHA256SUMS
 ```
 
 ```bash
-gh attestation verify gpu-driver-stack_1.0.0-1_amd64.deb --repo 7shantanu7/CICD
+gh attestation verify driverforge_1.0.0-1_amd64.deb --repo 7shantanu7/driverforge
 ```
 
 The attestation proves the file was built by this repository's release

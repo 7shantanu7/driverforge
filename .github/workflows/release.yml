@@ -80,14 +80,14 @@ jobs:
       - name: Unpack the x86_64 tarball for the SBOM
         run: |
           mkdir -p sbom-input
-          tar -xzf dist/gpu-driver-stack-*-linux-x86_64.tar.gz -C sbom-input
+          tar -xzf dist/driverforge-*-linux-x86_64.tar.gz -C sbom-input
 
       - name: SBOM (SPDX)
         uses: anchore/sbom-action@v0
         with:
           path: sbom-input
           format: spdx-json
-          output-file: dist/gpu-driver-stack-${{ env.TAG }}.spdx.json
+          output-file: dist/driverforge-${{ env.TAG }}.spdx.json
           upload-artifact: false
 
       - name: Build provenance attestation (SLSA, signed with Sigstore)
@@ -125,10 +125,10 @@ jobs:
             echo "### Verify this release"
             echo '```bash'
             echo "sha256sum --check --ignore-missing SHA256SUMS"
-            echo "gh attestation verify gpu-driver-stack_*.deb --repo ${GITHUB_REPOSITORY}"
+            echo "gh attestation verify driverforge_*.deb --repo ${GITHUB_REPOSITORY}"
             echo '```'
           } > notes.md
-          gh release create "$TAG" dist/* --title "gpu_driver_stack $TAG" --notes-file notes.md --verify-tag "${flags[@]}"
+          gh release create "$TAG" dist/* --title "driverforge $TAG" --notes-file notes.md --verify-tag "${flags[@]}"
 
       - name: Dry-run summary
         if: env.DRY_RUN == 'true'

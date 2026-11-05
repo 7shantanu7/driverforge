@@ -1,5 +1,5 @@
 jenkins:
-  systemMessage: "gpu_driver_stack build farm (configured as code)"
+  systemMessage: "driverforge build farm (configured as code)"
   numExecutors: 2
   securityRealm:
     local:
@@ -15,10 +15,10 @@ unclassified:
     url: http://localhost:8080/
 jobs:
   - script: >
-      multibranchPipelineJob('gpu-driver-stack') {
+      multibranchPipelineJob('driverforge') {
         branchSources {
           git {
-            id('gpu-driver-stack')
+            id('driverforge')
             remote(System.getenv('REPO_URL'))
           }
         }

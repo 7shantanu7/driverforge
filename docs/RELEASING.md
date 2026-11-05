@@ -8,7 +8,7 @@ change to two files (`VERSION` and `CHANGELOG.md`) plus a tag.
 - The release version follows [Semantic Versioning](https://semver.org/) and
   lives only in `VERSION`.
 - The plugin ABI has its own version: `GPU_CORE_PLUGIN_ABI_VERSION` in
-  `plugin_abi.h` and `GPU_STACK_PLUGIN_SOVERSION` in `CMakeLists.txt`. They
+  `plugin_abi.h` and `DRIVERFORGE_PLUGIN_SOVERSION` in `CMakeLists.txt`. They
   change only when the plugin ABI breaks, and a break also requires a new
   major release.
 - `scripts/check_abi.sh` (CI job "ABI check") fails on any ABI change until
@@ -24,7 +24,7 @@ change to two files (`VERSION` and `CHANGELOG.md`) plus a tag.
 3. Merge it, then tag the merge commit and push the tag:
 
    ```bash
-   git tag -s vX.Y.Z -m "gpu_driver_stack vX.Y.Z"
+   git tag -s vX.Y.Z -m "driverforge vX.Y.Z"
    ```
 
    ```bash
@@ -90,12 +90,12 @@ already verified them by checksum, and deleting them hides what happened.
 
 | File | Purpose |
 | --- | --- |
-| `gpu-driver-stack_X.Y.Z-1_{amd64,arm64}.deb` | Runtime: plugin, `gpu-stack-info`, shaders |
-| `gpu-driver-stack-dev_*.deb` | SDK: headers, static libraries, CMake config |
-| `gpu-driver-stack-tools_*.deb` | `shader_compiler` |
+| `driverforge_X.Y.Z-1_{amd64,arm64}.deb` | Runtime: plugin, `driverforge-info`, shaders |
+| `driverforge-dev_*.deb` | SDK: headers, static libraries, CMake config |
+| `driverforge-tools_*.deb` | `shader_compiler` |
 | `*-dbgsym_*.ddeb` | Detached debug symbols for crash triage |
-| `gpu-driver-stack*-X.Y.Z-1.x86_64.rpm` | The same split for RPM distributions |
-| `gpu-driver-stack-X.Y.Z-linux-*.tar.gz` | Relocatable tarball of everything |
+| `driverforge*-X.Y.Z-1.x86_64.rpm` | The same split for RPM distributions |
+| `driverforge-X.Y.Z-linux-*.tar.gz` | Relocatable tarball of everything |
 | `SHA256SUMS` | Checksums of every file above |
-| `gpu-driver-stack-vX.Y.Z.spdx.json` | SBOM of the shipped files |
+| `driverforge-vX.Y.Z.spdx.json` | SBOM of the shipped files |
 | Attestations (on GitHub) | Signed SLSA build provenance, checked with `gh attestation verify` |

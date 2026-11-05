@@ -17,11 +17,11 @@ load, while a single ABI break must.
   `project(VERSION)`, which feeds the generated `version.h`, the package
   versions, the CMake package version file and the release gate
   (`scripts/ci/verify_version.sh`).
-- `GPU_STACK_PLUGIN_SOVERSION` (CMake) and `GPU_CORE_PLUGIN_ABI_VERSION`
+- `DRIVERFORGE_PLUGIN_SOVERSION` (CMake) and `GPU_CORE_PLUGIN_ABI_VERSION`
   (`plugin_abi.h`) describe the plugin ABI. They change only on an ABI
   break, and an ABI break requires a new major release.
-- Binaries record the commit they were built from (`gpu-stack-info
-  --version`), taken from git, or from `GPU_STACK_GIT_SHA` in CI. It is a
+- Binaries record the commit they were built from (`driverforge-info
+  --version`), taken from git, or from `DRIVERFORGE_GIT_SHA` in CI. It is a
   fixed value, not a timestamp, so builds stay reproducible.
 
 ## Consequences

@@ -1,7 +1,9 @@
-# gpu_driver_stack: build, release and CI/CD engineering for a GPU driver stack
+# driverforge
 
-[![CI](https://github.com/7shantanu7/CICD/actions/workflows/ci.yml/badge.svg)](https://github.com/7shantanu7/CICD/actions/workflows/ci.yml)
-[![nightly](https://github.com/7shantanu7/CICD/actions/workflows/nightly.yml/badge.svg)](https://github.com/7shantanu7/CICD/actions/workflows/nightly.yml)
+**Build and release pipeline for a GPU driver stack.**
+
+[![CI](https://github.com/7shantanu7/driverforge/actions/workflows/ci.yml/badge.svg)](https://github.com/7shantanu7/driverforge/actions/workflows/ci.yml)
+[![nightly](https://github.com/7shantanu7/driverforge/actions/workflows/nightly.yml/badge.svg)](https://github.com/7shantanu7/driverforge/actions/workflows/nightly.yml)
 
 A modular C++ project shaped like a GPU driver stack, inspired by
 **NVK** (Mesa's open-source Vulkan driver for NVIDIA hardware), with a build,
@@ -33,7 +35,7 @@ signed, installable packages.
 ```mermaid
 flowchart LR
     subgraph host["Host process"]
-        app["gpu-stack-info<br/>(or any app)"]
+        app["driverforge-info<br/>(or any app)"]
         core["libgpu_core<br/>PluginLoader, Device,<br/>CommandBuffer, SubmissionQueue"]
         sw["software_rasterizer<br/>(static fallback)"]
     end
@@ -112,17 +114,17 @@ CC=gcc CXX=g++ cmake --workflow --preset release && ls build/release/dist
 ```
 
 ```bash
-GPU_STACK_DRIVERS=build/dev/drivers/nvk/libnvk_driver.so.1 build/dev/tools/gpu_stack_info/gpu-stack-info
+DRIVERFORGE_DRIVERS=build/dev/drivers/nvk/libnvk_driver.so.1 build/dev/tools/driverforge_info/driverforge-info
 ```
 
 The same toolchain is available as a container, which CI also tests:
 
 ```bash
-docker build -f Dockerfile.dev -t gpu-stack-dev .
+docker build -f Dockerfile.dev -t driverforge-dev .
 ```
 
 ```bash
-docker run --rm -v "$PWD:/workspace" -e CC=gcc-12 -e CXX=g++-12 gpu-stack-dev cmake --workflow --preset ci-release
+docker run --rm -v "$PWD:/workspace" -e CC=gcc-12 -e CXX=g++-12 driverforge-dev cmake --workflow --preset ci-release
 ```
 
 ## CI/CD pipeline
@@ -161,16 +163,16 @@ that run their own build farms.
 Install the packages from a release, then use it from CMake:
 
 ```cmake
-find_package(gpu_driver_stack 1.0 REQUIRED CONFIG)
-target_link_libraries(my_app PRIVATE gpu_driver_stack::gpu_core)
+find_package(driverforge 1.0 REQUIRED CONFIG)
+target_link_libraries(my_app PRIVATE driverforge::gpu_core)
 ```
 
 ```bash
-gpu-stack-info --require-plugin
+driverforge-info --require-plugin
 ```
 
 Writing a driver plugin needs only the C header: link
-`gpu_driver_stack::plugin_abi` and export the two entry points. A complete
+`driverforge::plugin_abi` and export the two entry points. A complete
 example is in `tests/consumer/src/third_party_plugin.c`.
 
 Every release can be verified:
@@ -180,7 +182,7 @@ sha256sum --check --ignore-missing SHA256SUMS
 ```
 
 ```bash
-gh attestation verify gpu-driver-stack_1.0.0-1_amd64.deb --repo 7shantanu7/CICD
+gh attestation verify driverforge_1.0.0-1_amd64.deb --repo 7shantanu7/driverforge
 ```
 
 ## Repository layout
@@ -197,7 +199,7 @@ gh attestation verify gpu-driver-stack_1.0.0-1_amd64.deb --repo 7shantanu7/CICD
 │   └── cuda/               # optional CUDA backend
 ├── shader_compiler/        # mock GLSL -> SPIR-V tool + build-time codegen
 ├── tools/
-│   ├── gpu_stack_info/     # host tool shipped in the runtime package
+│   ├── driverforge_info/     # host tool shipped in the runtime package
 │   └── buildstats/         # Python build/test metrics tool (+ unit tests)
 ├── tests/                  # unit, plugin, ABI, install and consumer tests
 ├── abi/                    # reviewed libabigail ABI baseline

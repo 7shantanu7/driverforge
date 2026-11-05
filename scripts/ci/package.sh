@@ -12,8 +12,8 @@ cd "$ROOT"
 # Reproducible packages: every timestamp comes from the commit.
 SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)"
 export SOURCE_DATE_EPOCH
-GPU_STACK_GIT_SHA="${GPU_STACK_GIT_SHA:-$(git rev-parse --short=12 HEAD)}"
-export GPU_STACK_GIT_SHA
+DRIVERFORGE_GIT_SHA="${DRIVERFORGE_GIT_SHA:-$(git rev-parse --short=12 HEAD)}"
+export DRIVERFORGE_GIT_SHA
 
 rm -rf "build/$PRESET/dist"
 cmake --workflow --preset "$PRESET"

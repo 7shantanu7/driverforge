@@ -65,7 +65,7 @@
       ],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "GPU_STACK_SANITIZE": "address,undefined"
+        "DRIVERFORGE_SANITIZE": "address,undefined"
       }
     },
     {
@@ -77,7 +77,7 @@
       ],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "GPU_STACK_SANITIZE": "thread"
+        "DRIVERFORGE_SANITIZE": "thread"
       }
     },
     {
@@ -89,8 +89,8 @@
       ],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "GPU_STACK_COVERAGE": "ON",
-        "GPU_STACK_COMPILER_CACHE": "none"
+        "DRIVERFORGE_COVERAGE": "ON",
+        "DRIVERFORGE_COMPILER_CACHE": "none"
       }
     },
     {
@@ -102,7 +102,7 @@
       ],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "GPU_STACK_CLANG_TIDY": "ON"
+        "DRIVERFORGE_CLANG_TIDY": "ON"
       }
     },
     {
@@ -115,7 +115,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
         "CMAKE_INSTALL_PREFIX": "/usr",
-        "GPU_STACK_GIT_SHA": "$env{GPU_STACK_GIT_SHA}"
+        "DRIVERFORGE_GIT_SHA": "$env{DRIVERFORGE_GIT_SHA}"
       }
     },
     {
@@ -136,8 +136,8 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
         "BUILD_TESTING": "OFF",
-        "GPU_STACK_COMPILER_CACHE": "none",
-        "GPU_STACK_REPRODUCIBLE": "OFF"
+        "DRIVERFORGE_COMPILER_CACHE": "none",
+        "DRIVERFORGE_REPRODUCIBLE": "OFF"
       }
     },
     {
@@ -148,7 +148,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
         "CMAKE_INSTALL_PREFIX": "/usr",
-        "GPU_STACK_GIT_SHA": "$env{GPU_STACK_GIT_SHA}",
+        "DRIVERFORGE_GIT_SHA": "$env{DRIVERFORGE_GIT_SHA}",
         "CMAKE_INSTALL_LIBDIR": "lib/aarch64-linux-gnu"
       }
     },

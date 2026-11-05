@@ -15,7 +15,7 @@ CC=clang-18 CXX=clang++-18 scripts/ci/build_and_test.sh asan
 Or work inside the CI image:
 
 ```bash
-docker build -f Dockerfile.dev -t gpu-stack-dev .
+docker build -f Dockerfile.dev -t driverforge-dev .
 ```
 
 ## Before you open a pull request

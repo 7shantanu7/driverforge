@@ -10,7 +10,7 @@
 # register runners. It is stored as a Kubernetes secret, never in this repo.
 set -euo pipefail
 
-CONFIG_URL="${1:-https://github.com/7shantanu7/CICD}"
+CONFIG_URL="${1:-https://github.com/7shantanu7/driverforge}"
 ARC_VERSION="${ARC_VERSION:-0.12.1}"   # pin; bump deliberately after reading release notes
 CHARTS="oci://ghcr.io/actions/actions-runner-controller-charts"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

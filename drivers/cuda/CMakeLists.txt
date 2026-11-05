@@ -6,7 +6,7 @@
 find_package(CUDAToolkit REQUIRED)
 
 add_library(cuda_compute STATIC src/saxpy.cu)
-add_library(gpu_driver_stack::cuda_compute ALIAS cuda_compute)
+add_library(driverforge::cuda_compute ALIAS cuda_compute)
 target_include_directories(cuda_compute PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>

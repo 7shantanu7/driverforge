@@ -13,8 +13,8 @@ GitHub Actions or GitLab for public code).
 ## Decision
 
 - Every build flavour is a CMake preset. Flags such as sanitizers, coverage
-  and clang-tidy are CMake options (`GPU_STACK_SANITIZE`,
-  `GPU_STACK_COVERAGE`, `GPU_STACK_CLANG_TIDY`), set by presets.
+  and clang-tidy are CMake options (`DRIVERFORGE_SANITIZE`,
+  `DRIVERFORGE_COVERAGE`, `DRIVERFORGE_CLANG_TIDY`), set by presets.
 - Every CI step is a script in `scripts/ci/`. CI files only choose the
   environment (runner, container, compiler) and call scripts.
 - The same `Dockerfile.dev` image is used by developers, the GitHub

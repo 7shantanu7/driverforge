@@ -4,4 +4,4 @@
 # Every entry must link to a tracking issue. Keep this list empty.
 #
 # Example:
-# SubmissionQueueTest.SomeFlakyCase   # https://github.com/7shantanu7/CICD/issues/NN
+# SubmissionQueueTest.SomeFlakyCase   # https://github.com/7shantanu7/driverforge/issues/NN

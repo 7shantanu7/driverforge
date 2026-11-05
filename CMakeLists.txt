@@ -3,19 +3,19 @@ cmake_minimum_required(VERSION 3.25)
 # The release version lives in exactly one place: the VERSION file at the
 # repository root. CMake, CPack, the release workflow, Jenkins and GitLab all
 # read it from there, so they can never disagree.
-file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" GPU_STACK_VERSION LIMIT_COUNT 1)
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" DRIVERFORGE_VERSION LIMIT_COUNT 1)
 
-project(gpu_driver_stack
-    VERSION ${GPU_STACK_VERSION}
+project(driverforge
+    VERSION ${DRIVERFORGE_VERSION}
     DESCRIPTION "NVK-inspired mock GPU driver stack used to demonstrate build and release engineering"
-    HOMEPAGE_URL "https://github.com/7shantanu7/CICD"
+    HOMEPAGE_URL "https://github.com/7shantanu7/driverforge"
     LANGUAGES C CXX
 )
 
 # The plugin ABI version is deliberately separate from the release version.
 # It is the SOVERSION of every driver plugin and only changes when the plugin
 # ABI breaks. scripts/check_abi.sh enforces that rule in CI.
-set(GPU_STACK_PLUGIN_SOVERSION 1)
+set(DRIVERFORGE_PLUGIN_SOVERSION 1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -48,11 +48,11 @@ option(ENABLE_SOFTWARE_RENDERER "Build the CPU fallback driver" ON)
 option(ENABLE_CUDA "Build the optional CUDA compute backend (needs nvcc)" OFF)
 option(BUILD_SHARED_LIBS "Build libraries as shared instead of static" OFF)
 option(BUILD_TESTING "Build unit tests" ON)
-option(GPU_STACK_ENABLE_INSTALL "Generate install rules and CPack packaging" ON)
+option(DRIVERFORGE_ENABLE_INSTALL "Generate install rules and CPack packaging" ON)
 
 # Plugins are installed into a private directory, not straight into libdir:
 # they are loaded with dlopen() by the host and never linked against.
-set(GPU_STACK_PLUGIN_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/gpu_driver_stack"
+set(DRIVERFORGE_PLUGIN_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/driverforge"
     CACHE STRING "Install directory for driver plugins, relative to the prefix")
 
 # Installed executables find shared libraries relative to themselves, so the
@@ -85,22 +85,22 @@ if(ENABLE_CUDA)
     add_subdirectory(drivers/cuda)
 endif()
 
-add_subdirectory(tools/gpu_stack_info)
+add_subdirectory(tools/driverforge_info)
 
 if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
 # Package names, shared by install rules (doc dirs) and CPack.
-set(GPU_STACK_PACKAGE_NAME_RUNTIME "gpu-driver-stack")
-set(GPU_STACK_PACKAGE_NAME_DEVELOPMENT "gpu-driver-stack-dev")
-set(GPU_STACK_PACKAGE_NAME_TOOLS "gpu-driver-stack-tools")
-set(GPU_STACK_MAINTAINER "Shantanu Zadbuke <7shantanu7@users.noreply.github.com>")
+set(DRIVERFORGE_PACKAGE_NAME_RUNTIME "driverforge")
+set(DRIVERFORGE_PACKAGE_NAME_DEVELOPMENT "driverforge-dev")
+set(DRIVERFORGE_PACKAGE_NAME_TOOLS "driverforge-tools")
+set(DRIVERFORGE_MAINTAINER "Shantanu Zadbuke <7shantanu7@users.noreply.github.com>")
 
-if(GPU_STACK_ENABLE_INSTALL)
+if(DRIVERFORGE_ENABLE_INSTALL)
     include(Install)
     include(Packaging)
 endif()
 
-message(STATUS "gpu_driver_stack ${PROJECT_VERSION} (plugin ABI ${GPU_STACK_PLUGIN_SOVERSION}), "
+message(STATUS "driverforge ${PROJECT_VERSION} (plugin ABI ${DRIVERFORGE_PLUGIN_SOVERSION}), "
                "build type '${CMAKE_BUILD_TYPE}', compiler ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")

@@ -57,7 +57,7 @@ jobs:
       - run: scripts/ci/install_deps.sh build
       - name: Cold build (compiler cache disabled)
         run: |
-          cmake --preset ci-release -DGPU_STACK_COMPILER_CACHE=none
+          cmake --preset ci-release -DDRIVERFORGE_COMPILER_CACHE=none
           cmake --build --preset ci-release
           ctest --preset ci-release --output-junit "$PWD/build/ci-release/junit.xml"
           PYTHONPATH=tools/buildstats python3 -m buildstats collect build/ci-release \

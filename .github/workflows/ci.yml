@@ -26,7 +26,7 @@ env:
   CCACHE_DIR: ${{ github.workspace }}/.ccache
   CCACHE_MAXSIZE: 500M
   CCACHE_COMPILERCHECK: content
-  GPU_STACK_GIT_SHA: ${{ github.sha }}
+  DRIVERFORGE_GIT_SHA: ${{ github.sha }}
   # Only main and release branches write caches. PRs read them, so a PR can
   # never poison the cache other builds trust (and caches do not pile up).
   SAVE_CACHE: ${{ github.event_name == 'push' }}
@@ -162,7 +162,7 @@ jobs:
         run: scripts/ci/install_deps.sh build clang-18 tidy
       - name: Build with clang-tidy (warnings are errors)
         run: |
-          cmake --preset tidy -DGPU_STACK_CLANG_TIDY_EXE=/usr/bin/clang-tidy-18
+          cmake --preset tidy -DDRIVERFORGE_CLANG_TIDY_EXE=/usr/bin/clang-tidy-18
           cmake --build --preset tidy
 
   abi:
@@ -262,7 +262,7 @@ jobs:
         with:
           context: .
           file: Dockerfile.dev
-          tags: gpu-stack-dev:ci
+          tags: driverforge-dev:ci
           load: true
           cache-from: type=gha,scope=dev-image
           cache-to: ${{ env.SAVE_CACHE == 'true' && 'type=gha,mode=max,scope=dev-image' || '' }}
@@ -270,8 +270,8 @@ jobs:
       - name: Build and test inside the dev image
         run: |
           docker run --rm -v "$PWD:/workspace" -w /workspace \
-            -e CC=gcc-12 -e CXX=g++-12 -e GPU_STACK_GIT_SHA \
-            gpu-stack-dev:ci scripts/ci/build_and_test.sh ci-release
+            -e CC=gcc-12 -e CXX=g++-12 -e DRIVERFORGE_GIT_SHA \
+            driverforge-dev:ci scripts/ci/build_and_test.sh ci-release
 
   packages:
     name: packages
