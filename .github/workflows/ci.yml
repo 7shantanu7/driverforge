@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install tools
         run: scripts/ci/install_deps.sh lint build
       - name: clang-format
@@ -71,11 +71,11 @@ jobs:
       CC: ${{ matrix.cc }}
       CXX: ${{ matrix.cxx }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install toolchain
         run: scripts/ci/install_deps.sh build ${{ matrix.compiler }}
       - name: Restore ccache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: .ccache
           key: ccache-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ github.run_id }}
@@ -84,13 +84,13 @@ jobs:
         run: scripts/ci/build_and_test.sh ci-${{ matrix.build_type }}
       - name: Save ccache
         if: always() && env.SAVE_CACHE == 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: .ccache
           key: ccache-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ github.run_id }}
       - name: Upload test results and metrics
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: results-${{ matrix.compiler }}-${{ matrix.build_type }}
           path: |
@@ -111,7 +111,7 @@ jobs:
       CC: clang-18
       CXX: clang++-18
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install toolchain
         run: scripts/ci/install_deps.sh build clang-18
       # Newer kernels randomize mmap with more entropy than TSan's shadow
@@ -131,7 +131,7 @@ jobs:
       CC: gcc
       CXX: g++
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install toolchain
         run: scripts/ci/install_deps.sh build coverage
       - name: Build and test with coverage
@@ -143,7 +143,7 @@ jobs:
           gcovr build/coverage --html-details coverage/index.html --cobertura coverage/cobertura.xml \
             | tee coverage/summary.txt
           { echo '### Coverage'; echo '```'; cat coverage/summary.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: coverage-report
           path: coverage/
@@ -157,7 +157,7 @@ jobs:
       CC: clang-18
       CXX: clang++-18
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install toolchain
         run: scripts/ci/install_deps.sh build clang-18 tidy
       - name: Build with clang-tidy (warnings are errors)
@@ -173,7 +173,7 @@ jobs:
       CC: gcc-12
       CXX: g++-12
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install toolchain
         run: scripts/ci/install_deps.sh build gcc-12 abi
       - name: Build plugin with debug info
@@ -191,7 +191,7 @@ jobs:
       CC: gcc
       CXX: g++
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
       - name: Install toolchain
@@ -204,11 +204,11 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install cross toolchain and qemu
         run: scripts/ci/install_deps.sh build cross package
       - name: Restore ccache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: .ccache
           key: ccache-aarch64-${{ github.run_id }}
@@ -217,7 +217,7 @@ jobs:
         run: scripts/ci/package.sh cross-aarch64
       - name: Save ccache
         if: always() && env.SAVE_CACHE == 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: .ccache
           key: ccache-aarch64-${{ github.run_id }}
@@ -236,7 +236,7 @@ jobs:
     env:
       CUDA_ARCHS: ${{ matrix.archs }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install build tools
         run: |
           apt-get update -qq
@@ -255,10 +255,10 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: docker/setup-buildx-action@v3
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
       - name: Build Dockerfile.dev (layer cache in GitHub Actions cache)
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: Dockerfile.dev

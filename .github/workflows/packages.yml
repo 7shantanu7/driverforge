@@ -38,7 +38,7 @@ jobs:
       CC: gcc
       CXX: g++
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref }}
           fetch-depth: 0
@@ -46,7 +46,7 @@ jobs:
         run: scripts/ci/install_deps.sh ${{ matrix.deps }}
       - name: Build, test, package, lint
         run: scripts/ci/package.sh ${{ matrix.preset }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: packages-${{ matrix.name }}
           path: dist/*
@@ -69,10 +69,10 @@ jobs:
           - { image: "fedora:43", kind: rpm, artifact: packages-rpm-x86_64 }
     container: ${{ matrix.image }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref }}
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: ${{ matrix.artifact }}
           path: dist
