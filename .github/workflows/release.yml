@@ -19,6 +19,12 @@ on:
         description: "Existing tag to dry-run the release for (nothing is published)"
         required: true
 
+# bash (with -eo pipefail) everywhere, including container jobs, whose
+# default shell is otherwise plain `sh`.
+defaults:
+  run:
+    shell: bash
+
 permissions:
   contents: read
 

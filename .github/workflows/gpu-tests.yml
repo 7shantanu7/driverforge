@@ -10,6 +10,12 @@ on:
         description: "CMAKE_CUDA_ARCHITECTURES for this run"
         default: "80;90"
 
+# bash (with -eo pipefail) everywhere, including container jobs, whose
+# default shell is otherwise plain `sh`.
+defaults:
+  run:
+    shell: bash
+
 permissions:
   contents: read
 

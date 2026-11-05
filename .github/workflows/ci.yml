@@ -8,6 +8,12 @@ on:
   workflow_dispatch:
 
 # Least privilege by default. Jobs that need more ask for it explicitly.
+# bash (with -eo pipefail) everywhere, including container jobs, whose
+# default shell is otherwise plain `sh`.
+defaults:
+  run:
+    shell: bash
+
 permissions:
   contents: read
 

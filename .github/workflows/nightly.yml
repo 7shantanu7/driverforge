@@ -12,6 +12,12 @@ on:
     - cron: "17 3 * * *"   # 03:17 UTC, off the top of the hour
   workflow_dispatch:
 
+# bash (with -eo pipefail) everywhere, including container jobs, whose
+# default shell is otherwise plain `sh`.
+defaults:
+  run:
+    shell: bash
+
 permissions:
   contents: read
 
