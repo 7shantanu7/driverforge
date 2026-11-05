@@ -1,0 +1,1634 @@
+<abi-corpus version='2.2' architecture='elf-amd-x86_64' soname='libnvk_driver.so.1'>
+  <elf-needed>
+    <dependency name='libstdc++.so.6'/>
+    <dependency name='libgcc_s.so.1'/>
+    <dependency name='libc.so.6'/>
+  </elf-needed>
+  <elf-function-symbols>
+    <elf-symbol name='gpu_core_plugin_get_api' version='GPU_CORE_PLUGIN_ABI_1' is-default-version='yes' type='func-type' binding='global-binding' visibility='default-visibility' is-defined='yes'/>
+    <elf-symbol name='gpu_core_plugin_negotiate_abi_version' version='GPU_CORE_PLUGIN_ABI_1' is-default-version='yes' type='func-type' binding='global-binding' visibility='default-visibility' is-defined='yes'/>
+  </elf-function-symbols>
+  <abi-instr address-size='64' path='/home/user/CICD/drivers/nvk/src/nvk_driver.cpp' language='LANG_C_plus_plus_14'>
+    <type-decl name='bool' size-in-bits='8' id='type-id-1'/>
+    <type-decl name='char' size-in-bits='8' id='type-id-2'/>
+    <array-type-def dimensions='1' type-id='type-id-2' size-in-bits='128' id='type-id-3'>
+      <subrange length='16' lower-bound='0' upper-bound='15' type-id='type-id-4' id='type-id-5'/>
+    </array-type-def>
+    <array-type-def dimensions='1' type-id='type-id-2' size-in-bits='8' id='type-id-6'>
+      <subrange length='1' lower-bound='0' upper-bound='0' type-id='type-id-4' id='type-id-7'/>
+    </array-type-def>
+    <array-type-def dimensions='1' type-id='type-id-2' size-in-bits='160' id='type-id-8'>
+      <subrange length='20' lower-bound='0' upper-bound='19' type-id='type-id-4' id='type-id-9'/>
+    </array-type-def>
+    <array-type-def dimensions='1' type-id='type-id-2' size-in-bits='32' id='type-id-10'>
+      <subrange length='4' lower-bound='0' upper-bound='3' type-id='type-id-4' id='type-id-11'/>
+    </array-type-def>
+    <type-decl name='double' size-in-bits='64' id='type-id-12'/>
+    <enum-decl name='gpu_core_capability' id='type-id-13'>
+      <underlying-type type-id='type-id-14'/>
+      <enumerator name='GPU_CORE_CAPABILITY_GRAPHICS' value='0'/>
+      <enumerator name='GPU_CORE_CAPABILITY_COMPUTE' value='1'/>
+    </enum-decl>
+    <enum-decl name='gpu_core_plugin_result' id='type-id-15'>
+      <underlying-type type-id='type-id-14'/>
+      <enumerator name='GPU_CORE_PLUGIN_OK' value='0'/>
+      <enumerator name='GPU_CORE_PLUGIN_ERROR_INCOMPATIBLE_VERSION' value='1'/>
+      <enumerator name='GPU_CORE_PLUGIN_ERROR_INVALID_ARGUMENT' value='2'/>
+    </enum-decl>
+    <type-decl name='float' size-in-bits='32' id='type-id-16'/>
+    <type-decl name='int' size-in-bits='32' id='type-id-17'/>
+    <type-decl name='long double' size-in-bits='128' id='type-id-18'/>
+    <type-decl name='long int' size-in-bits='64' id='type-id-19'/>
+    <type-decl name='long long int' size-in-bits='64' id='type-id-20'/>
+    <type-decl name='signed char' size-in-bits='8' id='type-id-21'/>
+    <class-decl name='_G_fpos_t' size-in-bits='128' is-struct='yes' visibility='default' id='type-id-22'>
+      <data-member access='public' layout-offset-in-bits='0'>
+        <var-decl name='__pos' type-id='type-id-23' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='64'>
+        <var-decl name='__state' type-id='type-id-24' visibility='default'/>
+      </data-member>
+    </class-decl>
+    <class-decl name='_IO_FILE' size-in-bits='1728' is-struct='yes' visibility='default' id='type-id-25'>
+      <data-member access='public' layout-offset-in-bits='0'>
+        <var-decl name='_flags' type-id='type-id-17' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='64'>
+        <var-decl name='_IO_read_ptr' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='128'>
+        <var-decl name='_IO_read_end' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='192'>
+        <var-decl name='_IO_read_base' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='256'>
+        <var-decl name='_IO_write_base' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='320'>
+        <var-decl name='_IO_write_ptr' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='384'>
+        <var-decl name='_IO_write_end' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='448'>
+        <var-decl name='_IO_buf_base' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='512'>
+        <var-decl name='_IO_buf_end' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='576'>
+        <var-decl name='_IO_save_base' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='640'>
+        <var-decl name='_IO_backup_base' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='704'>
+        <var-decl name='_IO_save_end' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='768'>
+        <var-decl name='_markers' type-id='type-id-27' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='832'>
+        <var-decl name='_chain' type-id='type-id-28' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='896'>
+        <var-decl name='_fileno' type-id='type-id-17' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='928'>
+        <var-decl name='_flags2' type-id='type-id-17' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='960'>
+        <var-decl name='_old_offset' type-id='type-id-23' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='1024'>
+        <var-decl name='_cur_column' type-id='type-id-29' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='1040'>
+        <var-decl name='_vtable_offset' type-id='type-id-21' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='1048'>
+        <var-decl name='_shortbuf' type-id='type-id-6' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='1088'>
+        <var-decl name='_lock' type-id='type-id-30' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='1152'>
+        <var-decl name='_offset' type-id='type-id-31' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='1216'>
+        <var-decl name='_codecvt' type-id='type-id-32' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='1280'>
+        <var-decl name='_wide_data' type-id='type-id-33' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='1344'>
+        <var-decl name='_freeres_list' type-id='type-id-28' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='1408'>
+        <var-decl name='_freeres_buf' type-id='type-id-34' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='1472'>
+        <var-decl name='__pad5' type-id='type-id-35' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='1536'>
+        <var-decl name='_mode' type-id='type-id-17' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='1568'>
+        <var-decl name='_unused2' type-id='type-id-8' visibility='default'/>
+      </data-member>
+    </class-decl>
+    <class-decl name='__mbstate_t' size-in-bits='64' is-struct='yes' naming-typedef-id='type-id-24' visibility='default' id='type-id-36'>
+      <member-type access='public'>
+        <union-decl name='__anonymous_union__' size-in-bits='32' is-anonymous='yes' visibility='default' id='type-id-37'>
+          <data-member access='public'>
+            <var-decl name='__wch' type-id='type-id-38' visibility='default'/>
+          </data-member>
+          <data-member access='public'>
+            <var-decl name='__wchb' type-id='type-id-10' visibility='default'/>
+          </data-member>
+        </union-decl>
+      </member-type>
+      <data-member access='public' layout-offset-in-bits='0'>
+        <var-decl name='__count' type-id='type-id-17' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='32'>
+        <var-decl name='__value' type-id='type-id-37' visibility='default'/>
+      </data-member>
+    </class-decl>
+    <class-decl name='div_t' size-in-bits='64' is-struct='yes' naming-typedef-id='type-id-39' visibility='default' id='type-id-40'>
+      <data-member access='public' layout-offset-in-bits='0'>
+        <var-decl name='quot' type-id='type-id-17' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='32'>
+        <var-decl name='rem' type-id='type-id-17' visibility='default'/>
+      </data-member>
+    </class-decl>
+    <class-decl name='gpu_core_plugin_api' size-in-bits='512' is-struct='yes' visibility='default' id='type-id-41'>
+      <data-member access='public' layout-offset-in-bits='0'>
+        <var-decl name='struct_size' type-id='type-id-42' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='32'>
+        <var-decl name='abi_version' type-id='type-id-42' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='64'>
+        <var-decl name='plugin_name' type-id='type-id-43' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='128'>
+        <var-decl name='plugin_version' type-id='type-id-43' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='192'>
+        <var-decl name='create_device' type-id='type-id-44' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='256'>
+        <var-decl name='destroy_device' type-id='type-id-45' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='320'>
+        <var-decl name='device_name' type-id='type-id-46' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='384'>
+        <var-decl name='device_supports' type-id='type-id-47' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='448'>
+        <var-decl name='device_submit' type-id='type-id-48' visibility='default'/>
+      </data-member>
+    </class-decl>
+    <class-decl name='lconv' size-in-bits='768' is-struct='yes' visibility='default' id='type-id-49'>
+      <data-member access='public' layout-offset-in-bits='0'>
+        <var-decl name='decimal_point' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='64'>
+        <var-decl name='thousands_sep' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='128'>
+        <var-decl name='grouping' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='192'>
+        <var-decl name='int_curr_symbol' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='256'>
+        <var-decl name='currency_symbol' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='320'>
+        <var-decl name='mon_decimal_point' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='384'>
+        <var-decl name='mon_thousands_sep' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='448'>
+        <var-decl name='mon_grouping' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='512'>
+        <var-decl name='positive_sign' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='576'>
+        <var-decl name='negative_sign' type-id='type-id-26' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='640'>
+        <var-decl name='int_frac_digits' type-id='type-id-2' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='648'>
+        <var-decl name='frac_digits' type-id='type-id-2' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='656'>
+        <var-decl name='p_cs_precedes' type-id='type-id-2' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='664'>
+        <var-decl name='p_sep_by_space' type-id='type-id-2' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='672'>
+        <var-decl name='n_cs_precedes' type-id='type-id-2' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='680'>
+        <var-decl name='n_sep_by_space' type-id='type-id-2' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='688'>
+        <var-decl name='p_sign_posn' type-id='type-id-2' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='696'>
+        <var-decl name='n_sign_posn' type-id='type-id-2' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='704'>
+        <var-decl name='int_p_cs_precedes' type-id='type-id-2' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='712'>
+        <var-decl name='int_p_sep_by_space' type-id='type-id-2' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='720'>
+        <var-decl name='int_n_cs_precedes' type-id='type-id-2' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='728'>
+        <var-decl name='int_n_sep_by_space' type-id='type-id-2' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='736'>
+        <var-decl name='int_p_sign_posn' type-id='type-id-2' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='744'>
+        <var-decl name='int_n_sign_posn' type-id='type-id-2' visibility='default'/>
+      </data-member>
+    </class-decl>
+    <class-decl name='ldiv_t' size-in-bits='128' is-struct='yes' naming-typedef-id='type-id-50' visibility='default' id='type-id-51'>
+      <data-member access='public' layout-offset-in-bits='0'>
+        <var-decl name='quot' type-id='type-id-19' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='64'>
+        <var-decl name='rem' type-id='type-id-19' visibility='default'/>
+      </data-member>
+    </class-decl>
+    <class-decl name='lldiv_t' size-in-bits='128' is-struct='yes' naming-typedef-id='type-id-52' visibility='default' id='type-id-53'>
+      <data-member access='public' layout-offset-in-bits='0'>
+        <var-decl name='quot' type-id='type-id-20' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='64'>
+        <var-decl name='rem' type-id='type-id-20' visibility='default'/>
+      </data-member>
+    </class-decl>
+    <class-decl name='typedef __va_list_tag __va_list_tag' size-in-bits='192' is-struct='yes' visibility='default' id='type-id-54'>
+      <data-member access='public' layout-offset-in-bits='0'>
+        <var-decl name='gp_offset' type-id='type-id-38' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='32'>
+        <var-decl name='fp_offset' type-id='type-id-38' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='64'>
+        <var-decl name='overflow_arg_area' type-id='type-id-34' visibility='default'/>
+      </data-member>
+      <data-member access='public' layout-offset-in-bits='128'>
+        <var-decl name='reg_save_area' type-id='type-id-34' visibility='default'/>
+      </data-member>
+    </class-decl>
+    <typedef-decl name='FILE' type-id='type-id-25' id='type-id-55'/>
+    <typedef-decl name='_IO_lock_t' type-id='type-id-56' id='type-id-57'/>
+    <typedef-decl name='__FILE' type-id='type-id-25' id='type-id-58'/>
+    <typedef-decl name='__compar_fn_t' type-id='type-id-59' id='type-id-60'/>
+    <typedef-decl name='__fpos_t' type-id='type-id-22' id='type-id-61'/>
+    <typedef-decl name='__mbstate_t' type-id='type-id-36' id='type-id-24'/>
+    <typedef-decl name='__off64_t' type-id='type-id-19' id='type-id-31'/>
+    <typedef-decl name='__off_t' type-id='type-id-19' id='type-id-23'/>
+    <typedef-decl name='__uint32_t' type-id='type-id-38' id='type-id-62'/>
+    <typedef-decl name='__uint64_t' type-id='type-id-4' id='type-id-63'/>
+    <typedef-decl name='div_t' type-id='type-id-40' id='type-id-39'/>
+    <typedef-decl name='fpos_t' type-id='type-id-61' id='type-id-64'/>
+    <typedef-decl name='gpu_core_capability' type-id='type-id-13' id='type-id-65'/>
+    <typedef-decl name='gpu_core_plugin_api' type-id='type-id-41' id='type-id-66'/>
+    <typedef-decl name='gpu_core_plugin_result' type-id='type-id-15' id='type-id-67'/>
+    <typedef-decl name='ldiv_t' type-id='type-id-51' id='type-id-50'/>
+    <typedef-decl name='lldiv_t' type-id='type-id-53' id='type-id-52'/>
+    <typedef-decl name='mbstate_t' type-id='type-id-24' id='type-id-68'/>
+    <typedef-decl name='size_t' type-id='type-id-4' id='type-id-35'/>
+    <typedef-decl name='uint32_t' type-id='type-id-62' id='type-id-42'/>
+    <typedef-decl name='uint64_t' type-id='type-id-63' id='type-id-69'/>
+    <typedef-decl name='wint_t' type-id='type-id-38' id='type-id-70'/>
+    <type-decl name='unnamed-enum-underlying-type-32' is-anonymous='yes' size-in-bits='32' alignment-in-bits='32' id='type-id-14'/>
+    <type-decl name='unsigned int' size-in-bits='32' id='type-id-38'/>
+    <type-decl name='unsigned long int' size-in-bits='64' id='type-id-4'/>
+    <type-decl name='unsigned long long int' size-in-bits='64' id='type-id-71'/>
+    <type-decl name='unsigned short int' size-in-bits='16' id='type-id-29'/>
+    <type-decl name='wchar_t' size-in-bits='32' id='type-id-72'/>
+    <pointer-type-def type-id='type-id-55' size-in-bits='64' id='type-id-73'/>
+    <pointer-type-def type-id='type-id-25' size-in-bits='64' id='type-id-28'/>
+    <pointer-type-def type-id='type-id-58' size-in-bits='64' id='type-id-74'/>
+    <reference-type-def kind='lvalue' type-id='type-id-75' size-in-bits='64' id='type-id-76'/>
+    <reference-type-def kind='lvalue' type-id='type-id-77' size-in-bits='64' id='type-id-78'/>
+    <pointer-type-def type-id='type-id-77' size-in-bits='64' id='type-id-79'/>
+    <reference-type-def kind='lvalue' type-id='type-id-80' size-in-bits='64' id='type-id-81'/>
+    <pointer-type-def type-id='type-id-80' size-in-bits='64' id='type-id-82'/>
+    <reference-type-def kind='lvalue' type-id='type-id-83' size-in-bits='64' id='type-id-84'/>
+    <pointer-type-def type-id='type-id-83' size-in-bits='64' id='type-id-85'/>
+    <reference-type-def kind='lvalue' type-id='type-id-2' size-in-bits='64' id='type-id-86'/>
+    <pointer-type-def type-id='type-id-2' size-in-bits='64' id='type-id-26'/>
+    <qualified-type-def type-id='type-id-26' const='yes' id='type-id-87'/>
+    <reference-type-def kind='lvalue' type-id='type-id-87' size-in-bits='64' id='type-id-88'/>
+    <pointer-type-def type-id='type-id-26' size-in-bits='64' id='type-id-89'/>
+    <qualified-type-def type-id='type-id-75' const='yes' id='type-id-90'/>
+    <reference-type-def kind='lvalue' type-id='type-id-90' size-in-bits='64' id='type-id-91'/>
+    <qualified-type-def type-id='type-id-77' const='yes' id='type-id-92'/>
+    <pointer-type-def type-id='type-id-92' size-in-bits='64' id='type-id-93'/>
+    <qualified-type-def type-id='type-id-80' const='yes' id='type-id-94'/>
+    <pointer-type-def type-id='type-id-94' size-in-bits='64' id='type-id-95'/>
+    <qualified-type-def type-id='type-id-83' const='yes' id='type-id-96'/>
+    <reference-type-def kind='lvalue' type-id='type-id-96' size-in-bits='64' id='type-id-97'/>
+    <pointer-type-def type-id='type-id-96' size-in-bits='64' id='type-id-98'/>
+    <qualified-type-def type-id='type-id-99' const='yes' id='type-id-100'/>
+    <reference-type-def kind='lvalue' type-id='type-id-100' size-in-bits='64' id='type-id-101'/>
+    <qualified-type-def type-id='type-id-1' const='yes' id='type-id-102'/>
+    <qualified-type-def type-id='type-id-2' const='yes' id='type-id-103'/>
+    <reference-type-def kind='lvalue' type-id='type-id-103' size-in-bits='64' id='type-id-104'/>
+    <pointer-type-def type-id='type-id-103' size-in-bits='64' id='type-id-43'/>
+    <pointer-type-def type-id='type-id-105' size-in-bits='64' id='type-id-46'/>
+    <qualified-type-def type-id='type-id-43' const='yes' id='type-id-106'/>
+    <reference-type-def kind='lvalue' type-id='type-id-106' size-in-bits='64' id='type-id-107'/>
+    <pointer-type-def type-id='type-id-43' size-in-bits='64' id='type-id-108'/>
+    <qualified-type-def type-id='type-id-64' const='yes' id='type-id-109'/>
+    <pointer-type-def type-id='type-id-109' size-in-bits='64' id='type-id-110'/>
+    <qualified-type-def type-id='type-id-66' const='yes' id='type-id-111'/>
+    <pointer-type-def type-id='type-id-111' size-in-bits='64' id='type-id-112'/>
+    <qualified-type-def type-id='type-id-17' const='yes' id='type-id-113'/>
+    <qualified-type-def type-id='type-id-68' const='yes' id='type-id-114'/>
+    <pointer-type-def type-id='type-id-114' size-in-bits='64' id='type-id-115'/>
+    <qualified-type-def type-id='type-id-116' const='yes' id='type-id-117'/>
+    <reference-type-def kind='lvalue' type-id='type-id-117' size-in-bits='64' id='type-id-118'/>
+    <pointer-type-def type-id='type-id-117' size-in-bits='64' id='type-id-119'/>
+    <qualified-type-def type-id='type-id-120' const='yes' id='type-id-121'/>
+    <reference-type-def kind='lvalue' type-id='type-id-121' size-in-bits='64' id='type-id-122'/>
+    <pointer-type-def type-id='type-id-121' size-in-bits='64' id='type-id-123'/>
+    <qualified-type-def type-id='type-id-124' const='yes' id='type-id-125'/>
+    <reference-type-def kind='lvalue' type-id='type-id-125' size-in-bits='64' id='type-id-126'/>
+    <qualified-type-def type-id='type-id-127' const='yes' id='type-id-128'/>
+    <reference-type-def kind='lvalue' type-id='type-id-128' size-in-bits='64' id='type-id-129'/>
+    <pointer-type-def type-id='type-id-128' size-in-bits='64' id='type-id-130'/>
+    <qualified-type-def type-id='type-id-131' const='yes' id='type-id-132'/>
+    <reference-type-def kind='lvalue' type-id='type-id-132' size-in-bits='64' id='type-id-133'/>
+    <qualified-type-def type-id='type-id-134' const='yes' id='type-id-135'/>
+    <reference-type-def kind='lvalue' type-id='type-id-135' size-in-bits='64' id='type-id-136'/>
+    <qualified-type-def type-id='type-id-137' const='yes' id='type-id-138'/>
+    <reference-type-def kind='lvalue' type-id='type-id-138' size-in-bits='64' id='type-id-139'/>
+    <qualified-type-def type-id='type-id-140' const='yes' id='type-id-141'/>
+    <reference-type-def kind='lvalue' type-id='type-id-141' size-in-bits='64' id='type-id-142'/>
+    <pointer-type-def type-id='type-id-141' size-in-bits='64' id='type-id-143'/>
+    <qualified-type-def type-id='type-id-144' const='yes' id='type-id-145'/>
+    <reference-type-def kind='lvalue' type-id='type-id-145' size-in-bits='64' id='type-id-146'/>
+    <pointer-type-def type-id='type-id-145' size-in-bits='64' id='type-id-147'/>
+    <qualified-type-def type-id='type-id-148' const='yes' id='type-id-149'/>
+    <reference-type-def kind='lvalue' type-id='type-id-149' size-in-bits='64' id='type-id-150'/>
+    <qualified-type-def type-id='type-id-151' const='yes' id='type-id-152'/>
+    <pointer-type-def type-id='type-id-152' size-in-bits='64' id='type-id-153'/>
+    <qualified-type-def type-id='type-id-154' const='yes' id='type-id-155'/>
+    <reference-type-def kind='lvalue' type-id='type-id-155' size-in-bits='64' id='type-id-156'/>
+    <qualified-type-def type-id='type-id-157' const='yes' id='type-id-158'/>
+    <reference-type-def kind='lvalue' type-id='type-id-158' size-in-bits='64' id='type-id-159'/>
+    <qualified-type-def type-id='type-id-160' const='yes' id='type-id-161'/>
+    <pointer-type-def type-id='type-id-161' size-in-bits='64' id='type-id-162'/>
+    <qualified-type-def type-id='type-id-72' const='yes' id='type-id-163'/>
+    <pointer-type-def type-id='type-id-163' size-in-bits='64' id='type-id-164'/>
+    <pointer-type-def type-id='type-id-164' size-in-bits='64' id='type-id-165'/>
+    <pointer-type-def type-id='type-id-64' size-in-bits='64' id='type-id-166'/>
+    <pointer-type-def type-id='type-id-167' size-in-bits='64' id='type-id-47'/>
+    <pointer-type-def type-id='type-id-168' size-in-bits='64' id='type-id-59'/>
+    <pointer-type-def type-id='type-id-49' size-in-bits='64' id='type-id-169'/>
+    <pointer-type-def type-id='type-id-68' size-in-bits='64' id='type-id-170'/>
+    <reference-type-def kind='lvalue' type-id='type-id-116' size-in-bits='64' id='type-id-171'/>
+    <pointer-type-def type-id='type-id-116' size-in-bits='64' id='type-id-172'/>
+    <reference-type-def kind='lvalue' type-id='type-id-173' size-in-bits='64' id='type-id-174'/>
+    <reference-type-def kind='lvalue' type-id='type-id-120' size-in-bits='64' id='type-id-175'/>
+    <reference-type-def kind='rvalue' type-id='type-id-120' size-in-bits='64' id='type-id-176'/>
+    <pointer-type-def type-id='type-id-120' size-in-bits='64' id='type-id-177'/>
+    <pointer-type-def type-id='type-id-178' size-in-bits='64' id='type-id-179'/>
+    <pointer-type-def type-id='type-id-180' size-in-bits='64' id='type-id-181'/>
+    <reference-type-def kind='lvalue' type-id='type-id-124' size-in-bits='64' id='type-id-182'/>
+    <reference-type-def kind='lvalue' type-id='type-id-183' size-in-bits='64' id='type-id-184'/>
+    <reference-type-def kind='lvalue' type-id='type-id-127' size-in-bits='64' id='type-id-185'/>
+    <pointer-type-def type-id='type-id-127' size-in-bits='64' id='type-id-186'/>
+    <reference-type-def kind='lvalue' type-id='type-id-187' size-in-bits='64' id='type-id-188'/>
+    <reference-type-def kind='lvalue' type-id='type-id-189' size-in-bits='64' id='type-id-190'/>
+    <reference-type-def kind='lvalue' type-id='type-id-131' size-in-bits='64' id='type-id-191'/>
+    <reference-type-def kind='rvalue' type-id='type-id-131' size-in-bits='64' id='type-id-192'/>
+    <pointer-type-def type-id='type-id-131' size-in-bits='64' id='type-id-193'/>
+    <reference-type-def kind='lvalue' type-id='type-id-134' size-in-bits='64' id='type-id-194'/>
+    <reference-type-def kind='lvalue' type-id='type-id-137' size-in-bits='64' id='type-id-195'/>
+    <pointer-type-def type-id='type-id-137' size-in-bits='64' id='type-id-196'/>
+    <reference-type-def kind='lvalue' type-id='type-id-140' size-in-bits='64' id='type-id-197'/>
+    <pointer-type-def type-id='type-id-140' size-in-bits='64' id='type-id-198'/>
+    <pointer-type-def type-id='type-id-151' size-in-bits='64' id='type-id-199'/>
+    <pointer-type-def type-id='type-id-154' size-in-bits='64' id='type-id-200'/>
+    <pointer-type-def type-id='type-id-54' size-in-bits='64' id='type-id-201'/>
+    <pointer-type-def type-id='type-id-202' size-in-bits='64' id='type-id-44'/>
+    <pointer-type-def type-id='type-id-203' size-in-bits='64' id='type-id-48'/>
+    <pointer-type-def type-id='type-id-42' size-in-bits='64' id='type-id-204'/>
+    <pointer-type-def type-id='type-id-205' size-in-bits='64' id='type-id-206'/>
+    <pointer-type-def type-id='type-id-207' size-in-bits='64' id='type-id-45'/>
+    <qualified-type-def type-id='type-id-116' volatile='yes' id='type-id-160'/>
+    <pointer-type-def type-id='type-id-160' size-in-bits='64' id='type-id-208'/>
+    <qualified-type-def type-id='type-id-137' volatile='yes' id='type-id-209'/>
+    <pointer-type-def type-id='type-id-209' size-in-bits='64' id='type-id-210'/>
+    <pointer-type-def type-id='type-id-72' size-in-bits='64' id='type-id-211'/>
+    <pointer-type-def type-id='type-id-211' size-in-bits='64' id='type-id-212'/>
+    <pointer-type-def type-id='type-id-213' size-in-bits='64' id='type-id-32'/>
+    <pointer-type-def type-id='type-id-57' size-in-bits='64' id='type-id-30'/>
+    <pointer-type-def type-id='type-id-214' size-in-bits='64' id='type-id-27'/>
+    <pointer-type-def type-id='type-id-215' size-in-bits='64' id='type-id-33'/>
+    <qualified-type-def type-id='type-id-216' const='yes' id='type-id-217'/>
+    <pointer-type-def type-id='type-id-217' size-in-bits='64' id='type-id-218'/>
+    <qualified-type-def type-id='type-id-219' const='yes' id='type-id-220'/>
+    <pointer-type-def type-id='type-id-220' size-in-bits='64' id='type-id-221'/>
+    <pointer-type-def type-id='type-id-222' size-in-bits='64' id='type-id-223'/>
+    <pointer-type-def type-id='type-id-216' size-in-bits='64' id='type-id-224'/>
+    <class-decl name='_IO_codecvt' is-struct='yes' visibility='default' is-declaration-only='yes' id='type-id-213'/>
+    <class-decl name='_IO_marker' is-struct='yes' visibility='default' is-declaration-only='yes' id='type-id-214'/>
+    <class-decl name='_IO_wide_data' is-struct='yes' visibility='default' is-declaration-only='yes' id='type-id-215'/>
+    <class-decl name='gpu_core_device_s' is-struct='yes' visibility='default' is-declaration-only='yes' id='type-id-222'/>
+    <class-decl name='tm' is-struct='yes' visibility='default' is-declaration-only='yes' id='type-id-219'/>
+    <typedef-decl name='gpu_core_device_handle' type-id='type-id-223' id='type-id-225'/>
+    <namespace-decl name='nvk_driver'>
+      <class-decl name='NvkDevice' visibility='default' is-declaration-only='yes' id='type-id-216'>
+        <member-function access='public'>
+          <function-decl name='Submit' mangled-name='_ZN10nvk_driver9NvkDevice6SubmitEj' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-224' is-artificial='yes'/>
+            <parameter type-id='type-id-42'/>
+            <return type-id='type-id-69'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public' static='yes'>
+          <function-decl name='Supports' mangled-name='_ZN10nvk_driver9NvkDevice8SupportsE19gpu_core_capability' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-65'/>
+            <return type-id='type-id-1'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public' constructor='yes'>
+          <function-decl name='NvkDevice' mangled-name='_ZN10nvk_driver9NvkDeviceC4Ev' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-224' is-artificial='yes'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public' constructor='yes'>
+          <function-decl name='NvkDevice' mangled-name='_ZN10nvk_driver9NvkDeviceC2Ev' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-224' is-artificial='yes'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public' const='yes'>
+          <function-decl name='Name' mangled-name='_ZNK10nvk_driver9NvkDevice4NameB5cxx11Ev' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-218' is-artificial='yes'/>
+            <return type-id='type-id-159'/>
+          </function-decl>
+        </member-function>
+      </class-decl>
+    </namespace-decl>
+    <function-decl name='gpu_core_plugin_negotiate_abi_version' mangled-name='gpu_core_plugin_negotiate_abi_version' visibility='default' binding='global' size-in-bits='64' elf-symbol-id='gpu_core_plugin_negotiate_abi_version@@GPU_CORE_PLUGIN_ABI_1'>
+      <parameter type-id='type-id-204' name='in_out_version'/>
+      <return type-id='type-id-67'/>
+    </function-decl>
+    <function-decl name='gpu_core_plugin_get_api' mangled-name='gpu_core_plugin_get_api' visibility='default' binding='global' size-in-bits='64' elf-symbol-id='gpu_core_plugin_get_api@@GPU_CORE_PLUGIN_ABI_1'>
+      <return type-id='type-id-112'/>
+    </function-decl>
+    <function-decl name='setlocale' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-17'/>
+      <parameter type-id='type-id-43'/>
+      <return type-id='type-id-26'/>
+    </function-decl>
+    <function-decl name='localeconv' visibility='default' binding='global' size-in-bits='64'>
+      <return type-id='type-id-169'/>
+    </function-decl>
+    <function-decl name='remove' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='rename' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <parameter type-id='type-id-43'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='fclose' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-73'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='tmpfile' visibility='default' binding='global' size-in-bits='64'>
+      <return type-id='type-id-73'/>
+    </function-decl>
+    <function-decl name='tmpnam' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-26'/>
+      <return type-id='type-id-26'/>
+    </function-decl>
+    <function-decl name='fflush' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-73'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='fopen' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <parameter type-id='type-id-43'/>
+      <return type-id='type-id-73'/>
+    </function-decl>
+    <function-decl name='freopen' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <parameter type-id='type-id-43'/>
+      <parameter type-id='type-id-73'/>
+      <return type-id='type-id-73'/>
+    </function-decl>
+    <function-decl name='setbuf' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-73'/>
+      <parameter type-id='type-id-26'/>
+      <return type-id='type-id-56'/>
+    </function-decl>
+    <function-decl name='setvbuf' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-73'/>
+      <parameter type-id='type-id-26'/>
+      <parameter type-id='type-id-17'/>
+      <parameter type-id='type-id-35'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='fgetc' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-73'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='getc' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-73'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='ungetc' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-17'/>
+      <parameter type-id='type-id-73'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='fseek' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-73'/>
+      <parameter type-id='type-id-19'/>
+      <parameter type-id='type-id-17'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='ftell' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-73'/>
+      <return type-id='type-id-19'/>
+    </function-decl>
+    <function-decl name='rewind' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-73'/>
+      <return type-id='type-id-56'/>
+    </function-decl>
+    <function-decl name='fgetpos' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-73'/>
+      <parameter type-id='type-id-166'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='fsetpos' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-73'/>
+      <parameter type-id='type-id-110'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='clearerr' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-73'/>
+      <return type-id='type-id-56'/>
+    </function-decl>
+    <function-decl name='feof' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-73'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='ferror' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-73'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='perror' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <return type-id='type-id-56'/>
+    </function-decl>
+    <function-decl name='strtod' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <parameter type-id='type-id-89'/>
+      <return type-id='type-id-12'/>
+    </function-decl>
+    <function-decl name='strtof' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <parameter type-id='type-id-89'/>
+      <return type-id='type-id-16'/>
+    </function-decl>
+    <function-decl name='strtold' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <parameter type-id='type-id-89'/>
+      <return type-id='type-id-18'/>
+    </function-decl>
+    <function-decl name='atoi' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='atol' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <return type-id='type-id-19'/>
+    </function-decl>
+    <function-decl name='atoll' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <return type-id='type-id-20'/>
+    </function-decl>
+    <function-decl name='rand' visibility='default' binding='global' size-in-bits='64'>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='srand' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-38'/>
+      <return type-id='type-id-56'/>
+    </function-decl>
+    <function-decl name='atexit' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-206'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='quick_exit' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-17'/>
+      <return type-id='type-id-56'/>
+    </function-decl>
+    <function-decl name='getenv' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <return type-id='type-id-26'/>
+    </function-decl>
+    <function-decl name='system' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='qsort' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-34'/>
+      <parameter type-id='type-id-35'/>
+      <parameter type-id='type-id-35'/>
+      <parameter type-id='type-id-60'/>
+      <return type-id='type-id-56'/>
+    </function-decl>
+    <function-decl name='div' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-17'/>
+      <parameter type-id='type-id-17'/>
+      <return type-id='type-id-39'/>
+    </function-decl>
+    <function-decl name='ldiv' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-19'/>
+      <parameter type-id='type-id-19'/>
+      <return type-id='type-id-50'/>
+    </function-decl>
+    <function-decl name='lldiv' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-20'/>
+      <parameter type-id='type-id-20'/>
+      <return type-id='type-id-52'/>
+    </function-decl>
+    <function-decl name='mblen' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <parameter type-id='type-id-35'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='mbtowc' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-43'/>
+      <parameter type-id='type-id-35'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='wcscmp' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-164'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='wcsncmp' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-35'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='wcscoll' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-164'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='wcsxfrm' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-35'/>
+      <return type-id='type-id-35'/>
+    </function-decl>
+    <function-decl name='wcscspn' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-164'/>
+      <return type-id='type-id-35'/>
+    </function-decl>
+    <function-decl name='wcsspn' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-164'/>
+      <return type-id='type-id-35'/>
+    </function-decl>
+    <function-decl name='wcstok' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-212'/>
+      <return type-id='type-id-211'/>
+    </function-decl>
+    <function-decl name='wcslen' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-164'/>
+      <return type-id='type-id-35'/>
+    </function-decl>
+    <function-decl name='wmemcmp' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-35'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='mbsinit' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-115'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='mbrtowc' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-43'/>
+      <parameter type-id='type-id-35'/>
+      <parameter type-id='type-id-170'/>
+      <return type-id='type-id-35'/>
+    </function-decl>
+    <function-decl name='btowc' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-17'/>
+      <return type-id='type-id-70'/>
+    </function-decl>
+    <function-decl name='wctob' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-70'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='mbrlen' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <parameter type-id='type-id-35'/>
+      <parameter type-id='type-id-170'/>
+      <return type-id='type-id-35'/>
+    </function-decl>
+    <function-decl name='wcstod' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-212'/>
+      <return type-id='type-id-12'/>
+    </function-decl>
+    <function-decl name='wcstof' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-212'/>
+      <return type-id='type-id-16'/>
+    </function-decl>
+    <function-decl name='wcstold' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-212'/>
+      <return type-id='type-id-18'/>
+    </function-decl>
+    <function-decl name='fwide' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-74'/>
+      <parameter type-id='type-id-17'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='fgetwc' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-74'/>
+      <return type-id='type-id-70'/>
+    </function-decl>
+    <function-decl name='getwc' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-74'/>
+      <return type-id='type-id-70'/>
+    </function-decl>
+    <function-decl name='getwchar' visibility='default' binding='global' size-in-bits='64'>
+      <return type-id='type-id-70'/>
+    </function-decl>
+    <function-decl name='fputwc' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-72'/>
+      <parameter type-id='type-id-74'/>
+      <return type-id='type-id-70'/>
+    </function-decl>
+    <function-decl name='putwc' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-72'/>
+      <parameter type-id='type-id-74'/>
+      <return type-id='type-id-70'/>
+    </function-decl>
+    <function-decl name='putwchar' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-72'/>
+      <return type-id='type-id-70'/>
+    </function-decl>
+    <function-decl name='fputws' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-74'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='ungetwc' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-70'/>
+      <parameter type-id='type-id-74'/>
+      <return type-id='type-id-70'/>
+    </function-decl>
+    <function-decl name='wcsftime' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-35'/>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-221'/>
+      <return type-id='type-id-35'/>
+    </function-decl>
+    <function-decl name='getchar' visibility='default' binding='global' size-in-bits='64'>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='fgets' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-26'/>
+      <parameter type-id='type-id-17'/>
+      <parameter type-id='type-id-73'/>
+      <return type-id='type-id-26'/>
+    </function-decl>
+    <function-decl name='fread' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-34'/>
+      <parameter type-id='type-id-35'/>
+      <parameter type-id='type-id-35'/>
+      <parameter type-id='type-id-73'/>
+      <return type-id='type-id-35'/>
+    </function-decl>
+    <function-decl name='bsearch' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-34'/>
+      <parameter type-id='type-id-34'/>
+      <parameter type-id='type-id-35'/>
+      <parameter type-id='type-id-35'/>
+      <parameter type-id='type-id-60'/>
+      <return type-id='type-id-34'/>
+    </function-decl>
+    <function-decl name='atof' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-43'/>
+      <return type-id='type-id-12'/>
+    </function-decl>
+    <function-decl name='wctomb' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-26'/>
+      <parameter type-id='type-id-72'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='mbstowcs' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-43'/>
+      <parameter type-id='type-id-35'/>
+      <return type-id='type-id-35'/>
+    </function-decl>
+    <function-decl name='wcstombs' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-26'/>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-35'/>
+      <return type-id='type-id-35'/>
+    </function-decl>
+    <function-decl name='wmemcpy' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-35'/>
+      <return type-id='type-id-211'/>
+    </function-decl>
+    <function-decl name='wmemmove' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-35'/>
+      <return type-id='type-id-211'/>
+    </function-decl>
+    <function-decl name='wmemset' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-72'/>
+      <parameter type-id='type-id-35'/>
+      <return type-id='type-id-211'/>
+    </function-decl>
+    <function-decl name='wcscpy' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-164'/>
+      <return type-id='type-id-211'/>
+    </function-decl>
+    <function-decl name='wcsncpy' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-35'/>
+      <return type-id='type-id-211'/>
+    </function-decl>
+    <function-decl name='wcscat' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-164'/>
+      <return type-id='type-id-211'/>
+    </function-decl>
+    <function-decl name='wcsncat' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-35'/>
+      <return type-id='type-id-211'/>
+    </function-decl>
+    <function-decl name='swprintf' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-35'/>
+      <parameter type-id='type-id-164'/>
+      <parameter is-variadic='yes'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='vswprintf' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-35'/>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-201'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='wprintf' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-164'/>
+      <parameter is-variadic='yes'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='fwprintf' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-74'/>
+      <parameter type-id='type-id-164'/>
+      <parameter is-variadic='yes'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='vwprintf' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-201'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='vfwprintf' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-74'/>
+      <parameter type-id='type-id-164'/>
+      <parameter type-id='type-id-201'/>
+      <return type-id='type-id-17'/>
+    </function-decl>
+    <function-decl name='fgetws' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-17'/>
+      <parameter type-id='type-id-74'/>
+      <return type-id='type-id-211'/>
+    </function-decl>
+    <function-decl name='wcrtomb' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-26'/>
+      <parameter type-id='type-id-72'/>
+      <parameter type-id='type-id-170'/>
+      <return type-id='type-id-35'/>
+    </function-decl>
+    <function-decl name='mbsrtowcs' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-211'/>
+      <parameter type-id='type-id-108'/>
+      <parameter type-id='type-id-35'/>
+      <parameter type-id='type-id-170'/>
+      <return type-id='type-id-35'/>
+    </function-decl>
+    <function-decl name='wcsrtombs' visibility='default' binding='global' size-in-bits='64'>
+      <parameter type-id='type-id-26'/>
+      <parameter type-id='type-id-165'/>
+      <parameter type-id='type-id-35'/>
+      <parameter type-id='type-id-170'/>
+      <return type-id='type-id-35'/>
+    </function-decl>
+    <namespace-decl name='std'>
+      <class-decl name='__new_allocator&lt;char&gt;' size-in-bits='8' visibility='default' id='type-id-127'>
+        <member-type access='public'>
+          <typedef-decl name='const_pointer' type-id='type-id-43' id='type-id-226'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='const_reference' type-id='type-id-104' id='type-id-227'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='pointer' type-id='type-id-26' id='type-id-228'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='reference' type-id='type-id-86' id='type-id-229'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='size_type' type-id='type-id-35' id='type-id-230'/>
+        </member-type>
+        <member-function access='public'>
+          <function-decl name='deallocate' mangled-name='_ZNSt15__new_allocatorIcE10deallocateEPcm' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-186' is-artificial='yes'/>
+            <parameter type-id='type-id-26'/>
+            <parameter type-id='type-id-230'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public'>
+          <function-decl name='__new_allocator' mangled-name='_ZNSt15__new_allocatorIcEC4ERKS0_' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-186' is-artificial='yes'/>
+            <parameter type-id='type-id-129'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public'>
+          <function-decl name='__new_allocator' mangled-name='_ZNSt15__new_allocatorIcEC2ERKS0_' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-186' is-artificial='yes'/>
+            <parameter type-id='type-id-129'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public' destructor='yes'>
+          <function-decl name='~__new_allocator' mangled-name='_ZNSt15__new_allocatorIcED4Ev' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-186' is-artificial='yes'/>
+            <parameter type-id='type-id-17' is-artificial='yes'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public' destructor='yes'>
+          <function-decl name='~__new_allocator' mangled-name='_ZNSt15__new_allocatorIcED2Ev' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-186' is-artificial='yes'/>
+            <parameter type-id='type-id-17' is-artificial='yes'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public'>
+          <function-decl name='__new_allocator' mangled-name='_ZNSt15__new_allocatorIcEC4Ev' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-186' is-artificial='yes'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public'>
+          <function-decl name='__new_allocator' mangled-name='_ZNSt15__new_allocatorIcEC2Ev' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-186' is-artificial='yes'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+      </class-decl>
+      <class-decl name='allocator&lt;char&gt;' size-in-bits='8' visibility='default' id='type-id-131'>
+        <base-class access='public' layout-offset-in-bits='0' type-id='type-id-127'/>
+        <member-function access='public'>
+          <function-decl name='allocator' mangled-name='_ZNSaIcEC4ERKS_' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-193' is-artificial='yes'/>
+            <parameter type-id='type-id-133'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public'>
+          <function-decl name='allocator' mangled-name='_ZNSaIcEC2ERKS_' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-193' is-artificial='yes'/>
+            <parameter type-id='type-id-133'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public' destructor='yes'>
+          <function-decl name='~allocator' mangled-name='_ZNSaIcED4Ev' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-193' is-artificial='yes'/>
+            <parameter type-id='type-id-17' is-artificial='yes'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public' destructor='yes'>
+          <function-decl name='~allocator' mangled-name='_ZNSaIcED2Ev' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-193' is-artificial='yes'/>
+            <parameter type-id='type-id-17' is-artificial='yes'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public'>
+          <function-decl name='allocator' mangled-name='_ZNSaIcEC4Ev' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-193' is-artificial='yes'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public'>
+          <function-decl name='allocator' mangled-name='_ZNSaIcEC2Ev' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-193' is-artificial='yes'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+      </class-decl>
+      <class-decl name='basic_string_view&lt;char, std::char_traits&lt;char&gt; &gt;' size-in-bits='128' visibility='default' id='type-id-140'>
+        <member-type access='public'>
+          <typedef-decl name='const_iterator' type-id='type-id-147' id='type-id-231'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='const_pointer' type-id='type-id-147' id='type-id-232'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='const_reference' type-id='type-id-146' id='type-id-233'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='const_reverse_iterator' type-id='type-id-235' id='type-id-234'/>
+        </member-type>
+        <data-member access='private' layout-offset-in-bits='0'>
+          <var-decl name='_M_len' type-id='type-id-35' visibility='default'/>
+        </data-member>
+        <data-member access='private' layout-offset-in-bits='64'>
+          <var-decl name='_M_str' type-id='type-id-43' visibility='default'/>
+        </data-member>
+      </class-decl>
+      <class-decl name='initializer_list&lt;char&gt;' size-in-bits='128' visibility='default' id='type-id-151'>
+        <member-type access='public'>
+          <typedef-decl name='const_iterator' type-id='type-id-43' id='type-id-236'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='iterator' type-id='type-id-43' id='type-id-237'/>
+        </member-type>
+        <data-member access='private' layout-offset-in-bits='0'>
+          <var-decl name='_M_array' type-id='type-id-237' visibility='default'/>
+        </data-member>
+        <data-member access='private' layout-offset-in-bits='64'>
+          <var-decl name='_M_len' type-id='type-id-230' visibility='default'/>
+        </data-member>
+      </class-decl>
+      <enum-decl name='memory_order' id='type-id-238'>
+        <underlying-type type-id='type-id-14'/>
+        <enumerator name='memory_order_relaxed' value='0'/>
+        <enumerator name='memory_order_consume' value='1'/>
+        <enumerator name='memory_order_acquire' value='2'/>
+        <enumerator name='memory_order_release' value='3'/>
+        <enumerator name='memory_order_acq_rel' value='4'/>
+        <enumerator name='memory_order_seq_cst' value='5'/>
+      </enum-decl>
+      <class-decl name='__atomic_base&lt;long unsigned int&gt;' size-in-bits='64' is-struct='yes' visibility='default' id='type-id-116'>
+        <member-type access='private'>
+          <typedef-decl name='__int_type' type-id='type-id-4' id='type-id-173'/>
+        </member-type>
+        <data-member access='private' static='yes'>
+          <var-decl name='_S_alignment' type-id='type-id-113' mangled-name='_ZNSt13__atomic_baseImE12_S_alignmentE' visibility='default'/>
+        </data-member>
+        <data-member access='private' layout-offset-in-bits='0'>
+          <var-decl name='_M_i' type-id='type-id-173' visibility='default'/>
+        </data-member>
+        <member-function access='public'>
+          <function-decl name='fetch_add' mangled-name='_ZNSt13__atomic_baseImE9fetch_addEmSt12memory_order' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-172' is-artificial='yes'/>
+            <parameter type-id='type-id-173'/>
+            <parameter type-id='type-id-239'/>
+            <return type-id='type-id-173'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public'>
+          <function-decl name='__atomic_base' mangled-name='_ZNSt13__atomic_baseImEC4Em' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-172' is-artificial='yes'/>
+            <parameter type-id='type-id-173'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public'>
+          <function-decl name='__atomic_base' mangled-name='_ZNSt13__atomic_baseImEC2Em' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-172' is-artificial='yes'/>
+            <parameter type-id='type-id-173'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+      </class-decl>
+      <class-decl name='__ptr_traits_ptr_to&lt;char const*, char const, false&gt;' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-240'>
+        <member-type access='public'>
+          <typedef-decl name='element_type' type-id='type-id-103' id='type-id-187'/>
+        </member-type>
+        <member-function access='public' static='yes'>
+          <function-decl name='pointer_to' mangled-name='_ZNSt19__ptr_traits_ptr_toIPKcS0_Lb0EE10pointer_toERS0_' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-188'/>
+            <return type-id='type-id-241'/>
+          </function-decl>
+        </member-function>
+      </class-decl>
+      <class-decl name='__ptr_traits_ptr_to&lt;char*, char, false&gt;' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-242'>
+        <member-type access='public'>
+          <typedef-decl name='element_type' type-id='type-id-2' id='type-id-189'/>
+        </member-type>
+        <member-function access='public' static='yes'>
+          <function-decl name='pointer_to' mangled-name='_ZNSt19__ptr_traits_ptr_toIPccLb0EE10pointer_toERc' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-190'/>
+            <return type-id='type-id-228'/>
+          </function-decl>
+        </member-function>
+      </class-decl>
+      <class-decl name='allocator_traits&lt;std::allocator&lt;char&gt; &gt;' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-243'>
+        <member-type access='public'>
+          <typedef-decl name='allocator_type' type-id='type-id-131' id='type-id-134'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='rebind_alloc' type-id='type-id-131' id='type-id-244'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='value_type' type-id='type-id-2' id='type-id-144'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='const_void_pointer' type-id='type-id-34' id='type-id-245'/>
+        </member-type>
+        <member-function access='public' static='yes'>
+          <function-decl name='deallocate' mangled-name='_ZNSt16allocator_traitsISaIcEE10deallocateERS0_Pcm' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-194'/>
+            <parameter type-id='type-id-228'/>
+            <parameter type-id='type-id-230'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+      </class-decl>
+      <class-decl name='atomic&lt;long unsigned int&gt;' size-in-bits='64' is-struct='yes' visibility='default' id='type-id-137'>
+        <base-class access='public' layout-offset-in-bits='0' type-id='type-id-116'/>
+        <member-type access='public'>
+          <typedef-decl name='__integral_type' type-id='type-id-4' id='type-id-246'/>
+        </member-type>
+        <data-member access='public' static='yes'>
+          <var-decl name='is_always_lock_free' type-id='type-id-102' mangled-name='_ZNSt6atomicImE19is_always_lock_freeE' visibility='default'/>
+        </data-member>
+        <member-function access='public'>
+          <function-decl name='atomic' mangled-name='_ZNSt6atomicImEC4Em' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-196' is-artificial='yes'/>
+            <parameter type-id='type-id-246'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public'>
+          <function-decl name='atomic' mangled-name='_ZNSt6atomicImEC2Em' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-196' is-artificial='yes'/>
+            <parameter type-id='type-id-246'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+      </class-decl>
+      <class-decl name='bidirectional_iterator_tag' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-247'>
+        <base-class access='public' layout-offset-in-bits='0' type-id='type-id-248'/>
+      </class-decl>
+      <class-decl name='char_traits&lt;char&gt;' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-249'>
+        <member-type access='public'>
+          <typedef-decl name='int_type' type-id='type-id-17' id='type-id-148'/>
+        </member-type>
+        <member-function access='public' static='yes'>
+          <function-decl name='copy' mangled-name='_ZNSt11char_traitsIcE4copyEPcPKcm' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-85'/>
+            <parameter type-id='type-id-98'/>
+            <parameter type-id='type-id-35'/>
+            <return type-id='type-id-85'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public' static='yes'>
+          <function-decl name='length' mangled-name='_ZNSt11char_traitsIcE6lengthEPKc' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-98'/>
+            <return type-id='type-id-35'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public' static='yes'>
+          <function-decl name='assign' mangled-name='_ZNSt11char_traitsIcE6assignERcRKc' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-84'/>
+            <parameter type-id='type-id-97'/>
+            <return type-id='type-id-56'/>
+          </function-decl>
+        </member-function>
+      </class-decl>
+      <class-decl name='forward_iterator_tag' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-248'>
+        <base-class access='public' layout-offset-in-bits='0' type-id='type-id-250'/>
+      </class-decl>
+      <class-decl name='input_iterator_tag' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-250'/>
+      <class-decl name='iterator_traits&lt;char const*&gt;' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-251'>
+        <member-type access='public'>
+          <typedef-decl name='difference_type' type-id='type-id-253' id='type-id-252'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='pointer' type-id='type-id-43' id='type-id-241'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='reference' type-id='type-id-104' id='type-id-254'/>
+        </member-type>
+      </class-decl>
+      <class-decl name='iterator_traits&lt;char*&gt;' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-255'>
+      </class-decl>
+      <class-decl name='nothrow_t' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-154'/>
+      <class-decl name='random_access_iterator_tag' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-256'>
+        <base-class access='public' layout-offset-in-bits='0' type-id='type-id-247'/>
+      </class-decl>
+      <typedef-decl name='memory_order' type-id='type-id-238' id='type-id-239'/>
+      <typedef-decl name='ptrdiff_t' type-id='type-id-19' id='type-id-253'/>
+      <typedef-decl name='string' type-id='type-id-120' id='type-id-157'/>
+      <class-decl name='reverse_iterator&lt;__gnu_cxx::__normal_iterator&lt;char const*, std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt; &gt;' visibility='default' is-declaration-only='yes' id='type-id-257'/>
+      <class-decl name='reverse_iterator&lt;__gnu_cxx::__normal_iterator&lt;char*, std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt; &gt;' visibility='default' is-declaration-only='yes' id='type-id-258'/>
+      <class-decl name='reverse_iterator&lt;char const*&gt;' visibility='default' is-declaration-only='yes' id='type-id-235'/>
+      <namespace-decl name='__cxx11'>
+        <class-decl name='basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;' size-in-bits='256' visibility='default' id='type-id-120'>
+          <member-type access='private'>
+            <enum-decl name='__anonymous_enum__' is-anonymous='yes' id='type-id-259'>
+              <underlying-type type-id='type-id-14'/>
+              <enumerator name='_S_local_capacity' value='15'/>
+            </enum-decl>
+          </member-type>
+          <member-type access='private'>
+            <class-decl name='_Alloc_hider' size-in-bits='64' is-struct='yes' visibility='default' id='type-id-178'>
+              <base-class access='public' layout-offset-in-bits='0' type-id='type-id-131'/>
+              <data-member access='public' layout-offset-in-bits='0'>
+                <var-decl name='_M_p' type-id='type-id-260' visibility='default'/>
+              </data-member>
+              <member-function access='public' constructor='yes'>
+                <function-decl name='_Alloc_hider' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_Alloc_hiderC4EPcRKS3_' visibility='default' binding='global' size-in-bits='64'>
+                  <parameter type-id='type-id-179' is-artificial='yes'/>
+                  <parameter type-id='type-id-260'/>
+                  <parameter type-id='type-id-133'/>
+                  <return type-id='type-id-56'/>
+                </function-decl>
+              </member-function>
+              <member-function access='public' constructor='yes'>
+                <function-decl name='_Alloc_hider' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_Alloc_hiderC2EPcRKS3_' visibility='default' binding='global' size-in-bits='64'>
+                  <parameter type-id='type-id-179' is-artificial='yes'/>
+                  <parameter type-id='type-id-260'/>
+                  <parameter type-id='type-id-133'/>
+                  <return type-id='type-id-56'/>
+                </function-decl>
+              </member-function>
+            </class-decl>
+          </member-type>
+          <member-type access='private'>
+            <class-decl name='__sv_wrapper' size-in-bits='128' is-struct='yes' visibility='default' id='type-id-180'>
+              <data-member access='public' layout-offset-in-bits='0'>
+                <var-decl name='_M_sv' type-id='type-id-261' visibility='default'/>
+              </data-member>
+            </class-decl>
+          </member-type>
+          <member-type access='private'>
+            <typedef-decl name='_Char_alloc_type' type-id='type-id-263' id='type-id-262'/>
+          </member-type>
+          <member-type access='protected'>
+            <typedef-decl name='__const_iterator' type-id='type-id-265' id='type-id-264'/>
+          </member-type>
+          <member-type access='private'>
+            <typedef-decl name='__sv_type' type-id='type-id-140' id='type-id-261'/>
+          </member-type>
+          <member-type access='public'>
+            <typedef-decl name='allocator_type' type-id='type-id-262' id='type-id-124'/>
+          </member-type>
+          <member-type access='public'>
+            <typedef-decl name='const_iterator' type-id='type-id-77' id='type-id-265'/>
+          </member-type>
+          <member-type access='public'>
+            <typedef-decl name='const_pointer' type-id='type-id-267' id='type-id-266'/>
+          </member-type>
+          <member-type access='public'>
+            <typedef-decl name='const_reference' type-id='type-id-269' id='type-id-268'/>
+          </member-type>
+          <member-type access='public'>
+            <typedef-decl name='iterator' type-id='type-id-80' id='type-id-270'/>
+          </member-type>
+          <member-type access='public'>
+            <typedef-decl name='pointer' type-id='type-id-271' id='type-id-260'/>
+          </member-type>
+          <member-type access='public'>
+            <typedef-decl name='reference' type-id='type-id-273' id='type-id-272'/>
+          </member-type>
+          <member-type access='public'>
+            <typedef-decl name='size_type' type-id='type-id-274' id='type-id-183'/>
+          </member-type>
+          <member-type access='private'>
+            <union-decl name='__anonymous_union__' size-in-bits='128' is-anonymous='yes' visibility='default' id='type-id-275'>
+              <data-member access='public'>
+                <var-decl name='_M_local_buf' type-id='type-id-3' visibility='default'/>
+              </data-member>
+              <data-member access='public'>
+                <var-decl name='_M_allocated_capacity' type-id='type-id-183' visibility='default'/>
+              </data-member>
+            </union-decl>
+          </member-type>
+          <member-type access='public'>
+            <typedef-decl name='const_reverse_iterator' type-id='type-id-257' id='type-id-276'/>
+          </member-type>
+          <member-type access='public'>
+            <typedef-decl name='reverse_iterator' type-id='type-id-258' id='type-id-277'/>
+          </member-type>
+          <data-member access='private' layout-offset-in-bits='0'>
+            <var-decl name='_M_dataplus' type-id='type-id-178' visibility='default'/>
+          </data-member>
+          <data-member access='private' layout-offset-in-bits='64'>
+            <var-decl name='_M_string_length' type-id='type-id-183' visibility='default'/>
+          </data-member>
+          <data-member access='private' layout-offset-in-bits='128'>
+            <var-decl name='' type-id='type-id-275' visibility='default'/>
+          </data-member>
+          <member-function access='private' static='yes'>
+            <function-decl name='_S_copy' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7_S_copyEPcPKcm' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-26'/>
+              <parameter type-id='type-id-43'/>
+              <parameter type-id='type-id-183'/>
+              <return type-id='type-id-56'/>
+            </function-decl>
+          </member-function>
+          <member-function access='private' static='yes'>
+            <function-decl name='_S_copy_chars' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_S_copy_charsEPcPKcS7_' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-26'/>
+              <parameter type-id='type-id-43'/>
+              <parameter type-id='type-id-43'/>
+              <return type-id='type-id-56'/>
+            </function-decl>
+          </member-function>
+          <member-function access='private' const='yes'>
+            <function-decl name='_M_local_data' mangled-name='_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_local_dataEv' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-123' is-artificial='yes'/>
+              <return type-id='type-id-266'/>
+            </function-decl>
+          </member-function>
+          <member-function access='private'>
+            <function-decl name='_M_destroy' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_destroyEm' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-177' is-artificial='yes'/>
+              <parameter type-id='type-id-183'/>
+              <return type-id='type-id-56'/>
+            </function-decl>
+          </member-function>
+          <member-function access='private'>
+            <function-decl name='_M_construct&lt;char const*&gt;' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPKcEEvT_S8_St20forward_iterator_tag' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-177' is-artificial='yes'/>
+              <parameter type-id='type-id-43'/>
+              <parameter type-id='type-id-43'/>
+              <parameter type-id='type-id-248'/>
+              <return type-id='type-id-56'/>
+            </function-decl>
+          </member-function>
+          <member-function access='private'>
+            <function-decl name='_M_set_length' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_set_lengthEm' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-177' is-artificial='yes'/>
+              <parameter type-id='type-id-183'/>
+              <return type-id='type-id-56'/>
+            </function-decl>
+          </member-function>
+          <member-function access='private'>
+            <function-decl name='_M_length' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_lengthEm' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-177' is-artificial='yes'/>
+              <parameter type-id='type-id-183'/>
+              <return type-id='type-id-56'/>
+            </function-decl>
+          </member-function>
+          <member-function access='private'>
+            <function-decl name='_M_capacity' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE11_M_capacityEm' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-177' is-artificial='yes'/>
+              <parameter type-id='type-id-183'/>
+              <return type-id='type-id-56'/>
+            </function-decl>
+          </member-function>
+          <member-function access='private'>
+            <function-decl name='_M_data' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7_M_dataEPc' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-177' is-artificial='yes'/>
+              <parameter type-id='type-id-260'/>
+              <return type-id='type-id-56'/>
+            </function-decl>
+          </member-function>
+          <member-function access='private'>
+            <function-decl name='_M_use_local_data' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE17_M_use_local_dataEv' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-177' is-artificial='yes'/>
+              <return type-id='type-id-260'/>
+            </function-decl>
+          </member-function>
+          <member-function access='private' const='yes'>
+            <function-decl name='_M_is_local' mangled-name='_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE11_M_is_localEv' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-123' is-artificial='yes'/>
+              <return type-id='type-id-1'/>
+            </function-decl>
+          </member-function>
+          <member-function access='private'>
+            <function-decl name='_M_get_allocator' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE16_M_get_allocatorEv' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-177' is-artificial='yes'/>
+              <return type-id='type-id-182'/>
+            </function-decl>
+          </member-function>
+          <member-function access='private'>
+            <function-decl name='_M_dispose' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_disposeEv' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-177' is-artificial='yes'/>
+              <return type-id='type-id-56'/>
+            </function-decl>
+          </member-function>
+          <member-function access='private'>
+            <function-decl name='_M_local_data' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_local_dataEv' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-177' is-artificial='yes'/>
+              <return type-id='type-id-260'/>
+            </function-decl>
+          </member-function>
+          <member-function access='private' const='yes'>
+            <function-decl name='_M_data' mangled-name='_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7_M_dataEv' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-123' is-artificial='yes'/>
+              <return type-id='type-id-260'/>
+            </function-decl>
+          </member-function>
+          <member-function access='public'>
+            <function-decl name='basic_string&lt;&gt;' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC4IS3_EEPKcRKS3_' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-177' is-artificial='yes'/>
+              <parameter type-id='type-id-43'/>
+              <parameter type-id='type-id-133'/>
+              <return type-id='type-id-56'/>
+            </function-decl>
+          </member-function>
+          <member-function access='public'>
+            <function-decl name='basic_string&lt;&gt;' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC2IS3_EEPKcRKS3_' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-177' is-artificial='yes'/>
+              <parameter type-id='type-id-43'/>
+              <parameter type-id='type-id-133'/>
+              <return type-id='type-id-56'/>
+            </function-decl>
+          </member-function>
+          <member-function access='public' destructor='yes'>
+            <function-decl name='~basic_string' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED4Ev' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-177' is-artificial='yes'/>
+              <parameter type-id='type-id-17' is-artificial='yes'/>
+              <return type-id='type-id-56'/>
+            </function-decl>
+          </member-function>
+          <member-function access='public' destructor='yes'>
+            <function-decl name='~basic_string' mangled-name='_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED2Ev' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-177' is-artificial='yes'/>
+              <parameter type-id='type-id-17' is-artificial='yes'/>
+              <return type-id='type-id-56'/>
+            </function-decl>
+          </member-function>
+          <member-function access='public' const='yes'>
+            <function-decl name='c_str' mangled-name='_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv' visibility='default' binding='global' size-in-bits='64'>
+              <parameter type-id='type-id-123' is-artificial='yes'/>
+              <return type-id='type-id-43'/>
+            </function-decl>
+          </member-function>
+        </class-decl>
+      </namespace-decl>
+    </namespace-decl>
+    <namespace-decl name='__gnu_cxx'>
+      <class-decl name='__normal_iterator&lt;char const*, std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;' size-in-bits='64' visibility='default' id='type-id-77'>
+        <member-type access='public'>
+          <typedef-decl name='pointer' type-id='type-id-241' id='type-id-278'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='reference' type-id='type-id-254' id='type-id-279'/>
+        </member-type>
+        <data-member access='protected' layout-offset-in-bits='0'>
+          <var-decl name='_M_current' type-id='type-id-43' visibility='default'/>
+        </data-member>
+      </class-decl>
+      <class-decl name='__normal_iterator&lt;char*, std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;' size-in-bits='64' visibility='default' id='type-id-80'>
+        <member-type access='public'>
+          <typedef-decl name='difference_type' type-id='type-id-252' id='type-id-280'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='reference' type-id='type-id-229' id='type-id-281'/>
+        </member-type>
+        <data-member access='protected' layout-offset-in-bits='0'>
+          <var-decl name='_M_current' type-id='type-id-26' visibility='default'/>
+        </data-member>
+      </class-decl>
+      <class-decl name='_Char_types&lt;char&gt;' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-282'>
+        <member-type access='public'>
+          <typedef-decl name='int_type' type-id='type-id-4' id='type-id-283'/>
+        </member-type>
+      </class-decl>
+      <class-decl name='__alloc_traits&lt;std::allocator&lt;char&gt;, char&gt;' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-284'>
+        <base-class access='public' layout-offset-in-bits='0' type-id='type-id-243'/>
+        <member-type access='public'>
+          <class-decl name='rebind&lt;char&gt;' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-285'>
+            <member-type access='public'>
+              <typedef-decl name='other' type-id='type-id-244' id='type-id-263'/>
+            </member-type>
+          </class-decl>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='const_pointer' type-id='type-id-226' id='type-id-267'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='const_reference' type-id='type-id-91' id='type-id-269'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='pointer' type-id='type-id-228' id='type-id-271'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='reference' type-id='type-id-76' id='type-id-273'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='size_type' type-id='type-id-230' id='type-id-274'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='value_type' type-id='type-id-144' id='type-id-75'/>
+        </member-type>
+      </class-decl>
+      <class-decl name='char_traits&lt;char&gt;' size-in-bits='8' is-struct='yes' visibility='default' id='type-id-286'>
+        <member-type access='public'>
+          <typedef-decl name='char_type' type-id='type-id-2' id='type-id-83'/>
+        </member-type>
+        <member-type access='public'>
+          <typedef-decl name='int_type' type-id='type-id-283' id='type-id-99'/>
+        </member-type>
+        <member-function access='public' static='yes'>
+          <function-decl name='eq' mangled-name='_ZN9__gnu_cxx11char_traitsIcE2eqERKcS3_' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-97'/>
+            <parameter type-id='type-id-97'/>
+            <return type-id='type-id-1'/>
+          </function-decl>
+        </member-function>
+        <member-function access='public' static='yes'>
+          <function-decl name='length' mangled-name='_ZN9__gnu_cxx11char_traitsIcE6lengthEPKc' visibility='default' binding='global' size-in-bits='64'>
+            <parameter type-id='type-id-98'/>
+            <return type-id='type-id-35'/>
+          </function-decl>
+        </member-function>
+      </class-decl>
+    </namespace-decl>
+    <type-decl name='variadic parameter type' id='type-id-287'/>
+    <type-decl name='void' id='type-id-56'/>
+    <pointer-type-def type-id='type-id-56' id='type-id-34'/>
+    <function-type size-in-bits='64' id='type-id-105'>
+      <parameter type-id='type-id-225'/>
+      <return type-id='type-id-43'/>
+    </function-type>
+    <function-type size-in-bits='64' id='type-id-202'>
+      <return type-id='type-id-225'/>
+    </function-type>
+    <function-type size-in-bits='64' id='type-id-167'>
+      <parameter type-id='type-id-225'/>
+      <parameter type-id='type-id-65'/>
+      <return type-id='type-id-17'/>
+    </function-type>
+    <function-type size-in-bits='64' id='type-id-168'>
+      <parameter type-id='type-id-34'/>
+      <parameter type-id='type-id-34'/>
+      <return type-id='type-id-17'/>
+    </function-type>
+    <function-type size-in-bits='64' id='type-id-203'>
+      <parameter type-id='type-id-225'/>
+      <parameter type-id='type-id-42'/>
+      <return type-id='type-id-69'/>
+    </function-type>
+    <function-type size-in-bits='64' id='type-id-205'>
+      <return type-id='type-id-56'/>
+    </function-type>
+    <function-type size-in-bits='64' id='type-id-207'>
+      <parameter type-id='type-id-225'/>
+      <return type-id='type-id-56'/>
+    </function-type>
+  </abi-instr>
+</abi-corpus>

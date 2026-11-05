@@ -2,150 +2,292 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, "release/**"]
   pull_request:
-    branches: [main]
+    branches: [main, "release/**"]
+  workflow_dispatch:
+
+# Least privilege by default. Jobs that need more ask for it explicitly.
+permissions:
+  contents: read
+
+# A new push to the same PR or branch cancels the run it makes obsolete.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 env:
-  NVK_DRIVER_VERSION: "0.1.0"
+  CCACHE_DIR: ${{ github.workspace }}/.ccache
+  CCACHE_MAXSIZE: 500M
+  CCACHE_COMPILERCHECK: content
+  GPU_STACK_GIT_SHA: ${{ github.sha }}
+  # Only main and release branches write caches. PRs read them, so a PR can
+  # never poison the cache other builds trust (and caches do not pile up).
+  SAVE_CACHE: ${{ github.event_name == 'push' }}
 
 jobs:
-  build-and-test:
+  lint:
+    name: lint (format, shell, workflows, presets, python)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: scripts/ci/install_deps.sh lint build
+      - name: clang-format
+        run: CLANG_FORMAT=clang-format-18 scripts/check_format.sh
+      - name: shellcheck
+        run: shellcheck scripts/*.sh scripts/ci/*.sh infra/k8s/arc/*.sh
+      - name: actionlint
+        # pipx ships on GitHub runners; Ubuntu 24.04 blocks system-wide pip.
+        run: pipx run --spec actionlint-py==1.7.12.25 actionlint -color
+      - name: CMake presets parse
+        run: cmake --list-presets=all
+      - name: buildstats unit tests
+        working-directory: tools/buildstats
+        run: python3 -m unittest discover -s tests -t . -v
+
+  build:
     name: build (${{ matrix.compiler }}, ${{ matrix.build_type }})
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        compiler: [gcc-12, clang-16]
-        build_type: [Debug, Release]
+        compiler: [gcc-12, gcc-14, clang-16, clang-18]
+        build_type: [debug, release]
         include:
-          - compiler: gcc-12
-            cc: gcc-12
-            cxx: g++-12
-          - compiler: clang-16
-            cc: clang-16
-            cxx: clang++-16
-
+          - { compiler: gcc-12, cc: gcc-12, cxx: g++-12 }
+          - { compiler: gcc-14, cc: gcc-14, cxx: g++-14 }
+          - { compiler: clang-16, cc: clang-16, cxx: clang++-16 }
+          - { compiler: clang-18, cc: clang-18, cxx: clang++-18 }
+    env:
+      CC: ${{ matrix.cc }}
+      CXX: ${{ matrix.cxx }}
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Install toolchain
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            ninja-build ccache ${{ matrix.cc }} ${{ matrix.cxx }}
-
-      - name: Cache ccache
-        uses: actions/cache@v4
+        run: scripts/ci/install_deps.sh build ${{ matrix.compiler }}
+      - name: Restore ccache
+        uses: actions/cache/restore@v4
         with:
-          path: ~/.cache/ccache
-          key: ccache-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ github.sha }}
-          restore-keys: |
-            ccache-${{ matrix.compiler }}-${{ matrix.build_type }}-
-
-      - name: Configure
-        run: |
-          cmake -G Ninja -B build \
-            -DCMAKE_C_COMPILER=${{ matrix.cc }} \
-            -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} \
-            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-            -DENABLE_DRIVER_NVK=ON \
-            -DENABLE_SOFTWARE_RENDERER=ON
-        # Note: no -DCMAKE_CXX_COMPILER_LAUNCHER=ccache here — the project's
-        # own CMakeLists.txt auto-detects and enables ccache itself now.
-
-      - name: Build
-        run: cmake --build build
-
-      - name: Report build times
-        run: ./scripts/report_build_times.sh build
-
-      - name: Test
-        run: ctest --test-dir build --output-on-failure
-
-      # Confirms the add_custom_command build-time codegen step actually ran
-      # and produced a real artifact, not just that shader_compiler compiled.
-      - name: Verify shader build artifact
-        run: |
-          test -f build/shader_compiler/triangle.spv
-          head -c4 build/shader_compiler/triangle.spv | grep -q MSPV
-
-  sanitize:
-    name: sanitizers (ASan+UBSan, clang-16, Debug)
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Install toolchain
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ninja-build clang-16
-
-      - name: Configure
-        run: |
-          cmake -G Ninja -B build-sanitize \
-            -DCMAKE_C_COMPILER=clang-16 \
-            -DCMAKE_CXX_COMPILER=clang++-16 \
-            -DCMAKE_BUILD_TYPE=Debug \
-            -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer -g" \
-            -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined" \
-            -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=address,undefined" \
-            -DENABLE_DRIVER_NVK=ON \
-            -DENABLE_SOFTWARE_RENDERER=ON
-
-      - name: Build
-        run: cmake --build build-sanitize
-
-      - name: Test under sanitizers
-        env:
-          ASAN_OPTIONS: halt_on_error=1:abort_on_error=1
-          UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
-        run: ctest --test-dir build-sanitize --output-on-failure
-
-  package-nvk-driver:
-    name: package nvk_driver artifact
-    needs: build-and-test
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Install toolchain
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ninja-build gcc-12 g++-12
-
-      - name: Configure (Release, driver only)
-        run: |
-          cmake -G Ninja -B build \
-            -DCMAKE_C_COMPILER=gcc-12 \
-            -DCMAKE_CXX_COMPILER=g++-12 \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DENABLE_DRIVER_NVK=ON \
-            -DENABLE_SOFTWARE_RENDERER=OFF \
-            -DBUILD_TESTING=OFF
-
-      - name: Build nvk_driver
-        run: cmake --build build --target nvk_driver
-
-      # Packages the driver as its own artifact, independent of the rest of
-      # the build — mirrors how a real driver ships on its own release
-      # cadence, separate from any host application.
-      - name: Package versioned artifact
-        run: |
-          PKG_NAME="nvk_driver-${NVK_DRIVER_VERSION}-linux-x86_64-${GITHUB_SHA::8}"
-          mkdir -p "$PKG_NAME/lib"
-          cp -a build/drivers/nvk/libnvk_driver.so* "$PKG_NAME/lib/"
-          cp -a drivers/nvk/include "$PKG_NAME/include"
-          tar -czf "${PKG_NAME}.tar.gz" "$PKG_NAME"
-          echo "PKG_NAME=$PKG_NAME" >> "$GITHUB_ENV"
-
-      - name: Upload artifact
+          path: .ccache
+          key: ccache-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ github.run_id }}
+          restore-keys: ccache-${{ matrix.compiler }}-${{ matrix.build_type }}-
+      - name: Build and test
+        run: scripts/ci/build_and_test.sh ci-${{ matrix.build_type }}
+      - name: Save ccache
+        if: always() && env.SAVE_CACHE == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .ccache
+          key: ccache-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ github.run_id }}
+      - name: Upload test results and metrics
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.PKG_NAME }}
-          path: ${{ env.PKG_NAME }}.tar.gz
-          retention-days: 30
+          name: results-${{ matrix.compiler }}-${{ matrix.build_type }}
+          path: |
+            build/ci-${{ matrix.build_type }}/junit.xml
+            build/ci-${{ matrix.build_type }}/metrics.json
+          retention-days: 14
+          if-no-files-found: ignore
+
+  sanitizers:
+    name: sanitizer (${{ matrix.preset }}, clang-18)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [asan, tsan]
+    env:
+      CC: clang-18
+      CXX: clang++-18
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install toolchain
+        run: scripts/ci/install_deps.sh build clang-18
+      # Newer kernels randomize mmap with more entropy than TSan's shadow
+      # memory layout allows ("unexpected memory mapping"). 28 bits is the
+      # documented workaround.
+      - name: Make the kernel TSan-compatible
+        if: matrix.preset == 'tsan'
+        run: sudo sysctl -w vm.mmap_rnd_bits=28
+      - name: Build and test under ${{ matrix.preset }}
+        run: scripts/ci/build_and_test.sh ${{ matrix.preset }}
+
+  coverage:
+    name: coverage (gcc, gcovr)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CC: gcc
+      CXX: g++
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install toolchain
+        run: scripts/ci/install_deps.sh build coverage
+      - name: Build and test with coverage
+        run: scripts/ci/build_and_test.sh coverage
+      - name: Coverage report (fails under the line threshold in gcovr.cfg)
+        run: |
+          set -o pipefail
+          mkdir -p coverage
+          gcovr build/coverage --html-details coverage/index.html --cobertura coverage/cobertura.xml \
+            | tee coverage/summary.txt
+          { echo '### Coverage'; echo '```'; cat coverage/summary.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 14
+
+  clang-tidy:
+    name: clang-tidy
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CC: clang-18
+      CXX: clang++-18
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install toolchain
+        run: scripts/ci/install_deps.sh build clang-18 tidy
+      - name: Build with clang-tidy (warnings are errors)
+        run: |
+          cmake --preset tidy -DGPU_STACK_CLANG_TIDY_EXE=/usr/bin/clang-tidy-18
+          cmake --build --preset tidy
+
+  abi:
+    name: ABI check (libabigail)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CC: gcc-12
+      CXX: g++-12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install toolchain
+        run: scripts/ci/install_deps.sh build gcc-12 abi
+      - name: Build plugin with debug info
+        run: cmake --workflow --preset abi
+      - name: Exported symbol allow-list
+        run: scripts/check_exported_symbols.sh build/abi/drivers/nvk/libnvk_driver.so.1.0.0 drivers/nvk/exported_symbols.txt
+      - name: Compare against the reviewed ABI baseline
+        run: scripts/check_abi.sh build/abi/drivers/nvk/libnvk_driver.so.1.0.0
+
+  reproducible:
+    name: reproducible build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CC: gcc
+      CXX: g++
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Install toolchain
+        run: scripts/ci/install_deps.sh build package
+      - name: Build twice in different directories and compare
+        run: scripts/check_reproducible.sh "$RUNNER_TEMP/repro"
+
+  cross-aarch64:
+    name: cross-compile aarch64 (tests under qemu)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install cross toolchain and qemu
+        run: scripts/ci/install_deps.sh build cross package
+      - name: Restore ccache
+        uses: actions/cache/restore@v4
+        with:
+          path: .ccache
+          key: ccache-aarch64-${{ github.run_id }}
+          restore-keys: ccache-aarch64-
+      - name: Build, test under qemu-aarch64, package
+        run: scripts/ci/package.sh cross-aarch64
+      - name: Save ccache
+        if: always() && env.SAVE_CACHE == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .ccache
+          key: ccache-aarch64-${{ github.run_id }}
+
+  cuda:
+    name: CUDA ${{ matrix.cuda }} (sm_${{ matrix.archs }}, build-only)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { cuda: "12.6.3", archs: "80;90" }
+          - { cuda: "12.8.1", archs: "80;90;100" }
+    container: nvidia/cuda:${{ matrix.cuda }}-devel-ubuntu24.04
+    env:
+      CUDA_ARCHS: ${{ matrix.archs }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build tools
+        run: |
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
+            cmake ninja-build g++ libgtest-dev python3 git
+      # No GPU on this runner: device tests skip, everything else runs.
+      - name: Build and test
+        run: scripts/ci/build_and_test.sh cuda
+      - name: Fat binary contains code for every requested architecture
+        run: |
+          read -ra archs <<< "${CUDA_ARCHS//;/ }"
+          scripts/ci/check_cuda_fatbin.sh build/cuda/tests/cuda_compute_tests "${archs[@]}"
+
+  container-parity:
+    name: dev container parity
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build Dockerfile.dev (layer cache in GitHub Actions cache)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.dev
+          tags: gpu-stack-dev:ci
+          load: true
+          cache-from: type=gha,scope=dev-image
+          cache-to: ${{ env.SAVE_CACHE == 'true' && 'type=gha,mode=max,scope=dev-image' || '' }}
+      # The exact image developers and Jenkins use must build and pass too.
+      - name: Build and test inside the dev image
+        run: |
+          docker run --rm -v "$PWD:/workspace" -w /workspace \
+            -e CC=gcc-12 -e CXX=g++-12 -e GPU_STACK_GIT_SHA \
+            gpu-stack-dev:ci scripts/ci/build_and_test.sh ci-release
+
+  packages:
+    name: packages
+    needs: [build]
+    uses: ./.github/workflows/packages.yml
+    with:
+      retention-days: 14
+
+  # Single required status check for branch protection: it stays stable
+  # while the jobs above are added, renamed or re-matrixed.
+  ci-success:
+    name: ci-success
+    if: always()
+    needs: [lint, build, sanitizers, coverage, clang-tidy, abi, reproducible, cross-aarch64, cuda, container-parity, packages]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: All required jobs passed
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+        run: |
+          echo "$RESULTS"
+          if echo "$RESULTS" | grep -qE '"(failure|cancelled)"'; then
+            echo "::error::one or more required jobs failed"
+            exit 1
+          fi

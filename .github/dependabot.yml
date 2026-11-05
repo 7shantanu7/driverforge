@@ -1,0 +1,19 @@
+# Keeps third-party actions and the dev image base current. Dependabot can
+# also rewrite tags to pinned commit SHAs; see docs/adr/0006.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: ci
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: build

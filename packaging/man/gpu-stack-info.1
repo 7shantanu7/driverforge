@@ -1,0 +1,25 @@
+.TH GPU-STACK-INFO 1 "" "gpu_driver_stack" "User Commands"
+.SH NAME
+gpu-stack-info \- list the GPU driver plugins this system can load
+.SH SYNOPSIS
+.B gpu-stack-info
+[\fB\-\-version\fR] [\fB\-\-require\-plugin\fR]
+.SH DESCRIPTION
+.B gpu-stack-info
+loads every driver plugin it can find through the gpu_core plugin loader,
+negotiates the plugin ABI version, and prints each device it creates. When
+no plugin loads, it falls back to the built-in software rasterizer.
+.SH OPTIONS
+.TP
+.B \-\-version
+Print the version, source commit, compiler and build type, then exit.
+.TP
+.B \-\-require\-plugin
+Exit with status 1 if no plugin loads, instead of using the fallback.
+.SH ENVIRONMENT
+.TP
+.B GPU_STACK_DRIVERS
+Colon-separated list of plugin files to load instead of the default
+plugin installed next to this program.
+.SH EXIT STATUS
+0 on success, 1 on failure, 2 on a usage error.

@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <vector>
 
+#include "gpu_core/gpu_core_export.h"
+
 namespace gpu_core {
 
 enum class CommandType {
@@ -20,7 +22,7 @@ struct Command {
 // Records a sequence of GPU commands prior to submission, mirroring Vulkan's
 // command buffer recording model (vkCmd* calls accumulate before
 // vkQueueSubmit).
-class CommandBuffer {
+class GPU_CORE_EXPORT CommandBuffer {
 public:
     void Record(Command command);
     void Reset();

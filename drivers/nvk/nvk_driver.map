@@ -1,0 +1,12 @@
+/*
+ * Linker version script: the complete list of symbols libnvk_driver exports.
+ * Everything else (C++ classes, vtables, typeinfo, inlined std:: code) is
+ * local. The version node name ties these symbols to plugin ABI 1.
+ */
+GPU_CORE_PLUGIN_ABI_1 {
+    global:
+        gpu_core_plugin_negotiate_abi_version;
+        gpu_core_plugin_get_api;
+    local:
+        *;
+};

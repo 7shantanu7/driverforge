@@ -1,0 +1,31 @@
+# Release notes are generated from commit messages (cliff.toml), and PRs are
+# squash-merged with the PR title as the commit message, so the title must
+# follow Conventional Commits: feat: ..., fix(abi): ..., ci: ..., etc.
+name: pr-title
+
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  conventional-commit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          types: |
+            feat
+            fix
+            perf
+            refactor
+            build
+            ci
+            test
+            docs
+            chore
+            revert

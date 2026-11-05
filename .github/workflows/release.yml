@@ -1,0 +1,130 @@
+# Tag-driven release. Pushing a tag vX.Y.Z (or vX.Y.Z-rc.N) on a commit
+# whose VERSION file says X.Y.Z:
+#   1. verifies tag, VERSION and CHANGELOG.md agree
+#   2. builds, tests, packages and install-tests every package
+#      (the same reusable workflow CI runs on every PR)
+#   3. generates SHA256SUMS, an SPDX SBOM and signed build-provenance
+#      attestations (Sigstore, via GitHub artifact attestations)
+#   4. publishes a GitHub Release with notes generated from the commits
+#
+# workflow_dispatch runs the whole thing as a dry run without publishing.
+name: release
+
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+", "v[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to dry-run the release for (nothing is published)"
+        required: true
+
+permissions:
+  contents: read
+
+# Never run two releases of the same tag at once; never cancel a release.
+concurrency:
+  group: release-${{ github.event.inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+env:
+  TAG: ${{ github.event.inputs.tag || github.ref_name }}
+  DRY_RUN: ${{ github.event_name == 'workflow_dispatch' }}
+
+jobs:
+  verify:
+    name: verify tag, VERSION and changelog
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+      - run: scripts/ci/verify_version.sh "$TAG"
+
+  packages:
+    name: packages
+    needs: verify
+    uses: ./.github/workflows/packages.yml
+    with:
+      retention-days: 90
+      ref: ${{ github.event.inputs.tag || github.ref_name }}
+
+  publish:
+    name: checksums, SBOM, provenance, GitHub Release
+    needs: packages
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write        # create the release
+      id-token: write        # Sigstore keyless signing for attestations
+      attestations: write    # store the provenance attestations
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: packages-*
+          path: dist
+          merge-multiple: true
+
+
+      # The SBOM describes what is actually shipped: the unpacked release
+      # tree (binaries, plugin, headers), with a digest for every file.
+      - name: Unpack the x86_64 tarball for the SBOM
+        run: |
+          mkdir -p sbom-input
+          tar -xzf dist/gpu-driver-stack-*-linux-x86_64.tar.gz -C sbom-input
+
+      - name: SBOM (SPDX)
+        uses: anchore/sbom-action@v0
+        with:
+          path: sbom-input
+          format: spdx-json
+          output-file: dist/gpu-driver-stack-${{ env.TAG }}.spdx.json
+          upload-artifact: false
+
+      - name: Build provenance attestation (SLSA, signed with Sigstore)
+        if: env.DRY_RUN != 'true'
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            dist/*.deb
+            dist/*.rpm
+            dist/*.tar.gz
+
+      - name: SHA256SUMS (computed last, so it covers the SBOM too)
+        working-directory: dist
+        run: sha256sum -- * | tee SHA256SUMS
+
+      - name: Release notes from commit history
+        id: notes
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --latest --strip header
+        env:
+          OUTPUT: RELEASE_NOTES.md
+
+      - name: Publish GitHub Release
+        if: env.DRY_RUN != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          flags=()
+          if [[ "$TAG" == *-rc.* ]]; then flags+=(--prerelease); fi
+          {
+            cat RELEASE_NOTES.md
+            echo
+            echo "### Verify this release"
+            echo '```bash'
+            echo "sha256sum --check --ignore-missing SHA256SUMS"
+            echo "gh attestation verify gpu-driver-stack_*.deb --repo ${GITHUB_REPOSITORY}"
+            echo '```'
+          } > notes.md
+          gh release create "$TAG" dist/* --title "gpu_driver_stack $TAG" --notes-file notes.md --verify-tag "${flags[@]}"
+
+      - name: Dry-run summary
+        if: env.DRY_RUN == 'true'
+        run: |
+          { echo "### Dry run for $TAG (nothing published)"; echo; echo '```'; ls -l dist; echo '```'; echo; cat RELEASE_NOTES.md; } >> "$GITHUB_STEP_SUMMARY"

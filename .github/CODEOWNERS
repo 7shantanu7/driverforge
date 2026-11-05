@@ -1,0 +1,6 @@
+# Changes to the release-critical surface need an explicit owner review.
+*                              @7shantanu7
+/core/include/gpu_core/plugin_abi.h   @7shantanu7
+/abi/                          @7shantanu7
+/.github/workflows/            @7shantanu7
+/VERSION                       @7shantanu7

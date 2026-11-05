@@ -1,5 +1,11 @@
 build/
 build-*/
 cmake-build-*/
+dist/
+.ccache/
 .cache/
+coverage/
 compile_commands.json
+CMakeUserPresets.json
+__pycache__/
+*.pyc

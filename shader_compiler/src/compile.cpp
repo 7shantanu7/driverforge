@@ -2,9 +2,12 @@
 
 namespace shader_compiler {
 
-void CompileMock(std::istream& input, std::ostream& output) {
+bool CompileMock(std::istream& input, std::ostream& output) {
     output << "MSPV" << '\x01';
-    output << input.rdbuf();
+    if (input.peek() != std::istream::traits_type::eof()) {
+        output << input.rdbuf();
+    }
+    return static_cast<bool>(output);
 }
 
 }  // namespace shader_compiler

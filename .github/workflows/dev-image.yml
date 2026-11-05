@@ -1,0 +1,41 @@
+# Publishes Dockerfile.dev to GitHub Container Registry, so Jenkins, GitLab
+# and developers pull the exact image CI's container-parity job tests.
+name: dev-image
+
+on:
+  push:
+    branches: [main]
+    paths: [Dockerfile.dev, .github/workflows/dev-image.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Image name (GHCR needs lowercase)
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}/dev" >> "$GITHUB_ENV"
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.dev
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha,scope=dev-image
+          cache-to: type=gha,mode=max,scope=dev-image
+          provenance: true
+          sbom: true

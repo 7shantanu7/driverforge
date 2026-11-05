@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++" tests="3" failures="1" skipped="1" time="1.6">
+  <testcase name="A.Stable" classname="A" time="0.5" status="run"/>
+  <testcase name="B.Sometimes" classname="B" time="1.0" status="fail"><failure message="timeout"/></testcase>
+  <testcase name="C.Gpu" classname="C" time="0.1" status="notrun"><skipped message="no GPU"/></testcase>
+</testsuite>

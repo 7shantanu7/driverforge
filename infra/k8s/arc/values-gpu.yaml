@@ -1,0 +1,33 @@
+# GPU pool: ephemeral runner pods scheduled only onto NVIDIA GPU nodes, one
+# GPU per job. Needs the NVIDIA GPU Operator (or device plugin + container
+# toolkit) on the cluster, which provides the nvidia.com/gpu resource, the
+# node labels and the "nvidia" RuntimeClass used here.
+runnerScaleSetName: arc-gpu
+githubConfigSecret: github-config
+minRunners: 0
+maxRunners: 2
+
+template:
+  spec:
+    runtimeClassName: nvidia
+    nodeSelector:
+      nvidia.com/gpu.present: "true"
+    tolerations:
+      - key: nvidia.com/gpu
+        operator: Exists
+        effect: NoSchedule
+    containers:
+      - name: runner
+        # CUDA userspace in the image; the driver comes from the node.
+        image: ghcr.io/actions/actions-runner:latest
+        command: ["/home/runner/run.sh"]
+        env:
+          - name: NVIDIA_VISIBLE_DEVICES
+            value: all
+          - name: NVIDIA_DRIVER_CAPABILITIES
+            value: compute,utility
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+            cpu: "8"
+            memory: 32Gi
