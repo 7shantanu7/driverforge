@@ -30,6 +30,14 @@ class NinjaLogTest(unittest.TestCase):
         with self.assertRaises(ninja_log.NinjaLogError):
             ninja_log.parse_lines(["hello\n"])
 
+    def test_accepts_ninja_1_13_log_v7(self):
+        lines = ["# ninja log v7\n",
+                 "0\t4\t1794423057613582265\ta.out\tdffaed2583b7e595\n",
+                 "0\t9\t1794423057616884040\tb.out\t672c1c52c663d5f8\n"]
+        steps = ninja_log.parse_lines(lines)
+        self.assertEqual([s.output for s in steps], ["a.out", "b.out"])
+        self.assertAlmostEqual(steps[1].duration_s, 0.009)
+
     def test_rejects_unknown_versions(self):
         with self.assertRaises(ninja_log.NinjaLogError):
             ninja_log.parse_lines(["# ninja log v4\n"])
