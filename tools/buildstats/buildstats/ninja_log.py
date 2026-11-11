@@ -1,10 +1,18 @@
-"""Parser for Ninja's .ninja_log (format v5 and v6)."""
+"""Parser for Ninja's .ninja_log (format v5, v6 and v7).
+
+All three share the same tab-separated line layout
+(start_ms, end_ms, mtime, output, command_hash). v6 changed how mtime is
+recorded and v7 (Ninja 1.13+) switched the command hash algorithm; neither
+changes anything this parser reads.
+"""
 
 from __future__ import annotations
 
 import dataclasses
 from pathlib import Path
 from typing import Dict, Iterable, List, Tuple
+
+SUPPORTED_VERSIONS = (5, 6, 7)
 
 
 @dataclasses.dataclass(frozen=True)
@@ -40,7 +48,7 @@ def parse_lines(lines: Iterable[str]) -> List[Step]:
     if not header.startswith("# ninja log v"):
         raise NinjaLogError(f"not a ninja log (header was {header!r})")
     version = int(header.rsplit("v", 1)[1])
-    if version not in (5, 6):
+    if version not in SUPPORTED_VERSIONS:
         raise NinjaLogError(f"unsupported ninja log version {version}")
 
     builds: List[Dict[str, Step]] = [{}]
