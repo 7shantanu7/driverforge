@@ -29,7 +29,7 @@ jobs:
     env:
       CUDA_ARCHS: ${{ inputs.cuda_archs }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install build tools
         run: |
           apt-get update -qq

@@ -30,7 +30,7 @@ jobs:
       CC: clang-18
       CXX: clang++-18
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: scripts/ci/install_deps.sh build clang-18
       - name: Build
         run: |
@@ -39,7 +39,7 @@ jobs:
       - name: Run the suite 25 times and report unstable tests
         run: scripts/ci/flaky_hunt.sh build/ci-debug 25
       - if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: flaky-hunt
           path: build/ci-debug/flaky-hunt/
@@ -53,7 +53,7 @@ jobs:
       CC: gcc
       CXX: g++
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: scripts/ci/install_deps.sh build
       - name: Cold build (compiler cache disabled)
         run: |
@@ -64,7 +64,7 @@ jobs:
             --label nightly-cold --junit build/ci-release/junit.xml --no-ccache -o metrics.json
           PYTHONPATH=tools/buildstats python3 -m buildstats markdown metrics.json >> "$GITHUB_STEP_SUMMARY"
       - name: Restore previous night's metrics
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: baseline-metrics.json
           key: nightly-metrics-${{ github.run_id }}
@@ -75,11 +75,11 @@ jobs:
         if: success()
         run: cp metrics.json baseline-metrics.json
       - if: success()
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: baseline-metrics.json
           key: nightly-metrics-${{ github.run_id }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: nightly-metrics
           path: metrics.json
