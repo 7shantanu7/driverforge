@@ -4,7 +4,7 @@
 #
 # Pin the base by digest in production (Dependabot keeps it current):
 #   FROM ubuntu:24.04@sha256:<digest>
-FROM ubuntu:25.10
+FROM ubuntu:24.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
