@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import statistics
 from typing import List, Optional, Tuple
 
 SCHEMA_VERSION = 1
@@ -86,3 +87,24 @@ def compare(
     if old_tests and new_tests is not None and new_tests < old_tests:
         messages.append(f"note: test count dropped from {old_tests} to {new_tests}")
     return ok, messages
+
+
+def history_entry(doc: dict) -> dict:
+    """The slice of a metrics document that is worth keeping night to night."""
+    return {
+        "run_id": (doc.get("meta") or {}).get("run_id"),
+        "cpu_seconds": (doc.get("build") or {}).get("cpu_seconds", 0.0),
+        "tests": (doc.get("tests") or {}).get("tests"),
+    }
+
+
+def baseline_from_history(history: List[dict]) -> dict:
+    """A baseline document whose compile time is the MEDIAN of the recorded
+    nights. A single slow (or fast) runner then cannot move the baseline,
+    which a previous-night-only comparison could not guarantee."""
+    cpu = [h["cpu_seconds"] for h in history if h.get("cpu_seconds")]
+    tests = next((h["tests"] for h in reversed(history) if h.get("tests")), None)
+    return {
+        "build": {"cpu_seconds": statistics.median(cpu) if cpu else 0.0},
+        "tests": {"tests": tests},
+    }

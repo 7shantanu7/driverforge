@@ -2,7 +2,7 @@
 #   * flaky-test hunt: the whole suite 25x, shuffled and parallel,
 #     INCLUDING quarantined tests
 #   * cold (no cache) build to track true build cost over time, compared
-#     against the previous night to catch build-time regressions
+#     against the median of recent nights to catch build-time regressions
 #   * nightly packages with short retention, for anyone who wants to test
 #     main before a release
 name: nightly
@@ -63,23 +63,32 @@ jobs:
           PYTHONPATH=tools/buildstats python3 -m buildstats collect build/ci-release \
             --label nightly-cold --junit build/ci-release/junit.xml --no-ccache -o metrics.json
           PYTHONPATH=tools/buildstats python3 -m buildstats markdown metrics.json >> "$GITHUB_STEP_SUMMARY"
-      - name: Restore previous night's metrics
+      - name: Restore recent nights' metrics
         uses: actions/cache/restore@v6
         with:
-          path: baseline-metrics.json
-          key: nightly-metrics-${{ github.run_id }}
-          restore-keys: nightly-metrics-
-      - name: Compare with previous night (fails on >25% compile-time growth)
-        run: PYTHONPATH=tools/buildstats python3 -m buildstats compare baseline-metrics.json metrics.json
-      - name: Store tonight's metrics as the next baseline
-        if: success()
-        run: cp metrics.json baseline-metrics.json
-      - if: success()
+          path: metrics-history.json
+          key: nightly-history-${{ github.run_id }}
+          restore-keys: nightly-history-
+      # Compared with the MEDIAN of the last 7 nights, not just last night:
+      # shared runners vary a lot in speed, so one slow (or fast) night must
+      # not decide the result. The floor is high because a cold build here is
+      # only a few tens of CPU-seconds. Needs 3 nights of history to fail.
+      - name: Compare with recent nights (fails on >25% compile-time growth)
+        run: |
+          PYTHONPATH=tools/buildstats python3 -m buildstats compare metrics-history.json metrics.json \
+            --min-samples 3 --min-seconds 20
+      # Record tonight even when the gate fails. Otherwise the baseline never
+      # moves and every later night is judged against the same stale number.
+      - name: Record tonight in the history
+        if: ${{ !cancelled() && hashFiles('metrics.json') != '' }}
+        run: PYTHONPATH=tools/buildstats python3 -m buildstats history metrics-history.json metrics.json --keep 7
+      - if: ${{ !cancelled() && hashFiles('metrics-history.json') != '' }}
         uses: actions/cache/save@v6
         with:
-          path: baseline-metrics.json
-          key: nightly-metrics-${{ github.run_id }}
-      - uses: actions/upload-artifact@v7
+          path: metrics-history.json
+          key: nightly-history-${{ github.run_id }}
+      - if: ${{ !cancelled() && hashFiles('metrics.json') != '' }}
+        uses: actions/upload-artifact@v7
         with:
           name: nightly-metrics
           path: metrics.json

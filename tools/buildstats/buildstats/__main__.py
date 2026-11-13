@@ -46,11 +46,28 @@ def _cmd_compare(args: argparse.Namespace) -> int:
         print(f"no baseline at {baseline_path}; nothing to compare (first run on this branch?)")
         return 0
     baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
+    warn_only = args.warn_only
+    if isinstance(baseline, list):  # a history file: compare against its median
+        samples = len(baseline)
+        baseline = report.baseline_from_history(baseline)
+        print(f"baseline: median of {samples} previous night(s)")
+        if samples < args.min_samples:
+            print(f"fewer than {args.min_samples} nights recorded; reporting only, not failing")
+            warn_only = True
     current = json.loads(Path(args.current).read_text(encoding="utf-8"))
     ok, messages = report.compare(baseline, current, args.max_regression, args.min_seconds)
     for message in messages:
         print(message)
-    return 0 if ok or args.warn_only else 1
+    return 0 if ok or warn_only else 1
+
+
+def _cmd_history(args: argparse.Namespace) -> int:
+    path = Path(args.history)
+    history = json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
+    current = json.loads(Path(args.current).read_text(encoding="utf-8"))
+    history.append(report.history_entry(current))
+    path.write_text(json.dumps(history[-args.keep:], indent=2) + "\n", encoding="utf-8")
+    return 0
 
 
 def _cmd_flaky(args: argparse.Namespace) -> int:
@@ -86,15 +103,23 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("metrics")
     p.set_defaults(func=_cmd_markdown)
 
-    p = sub.add_parser("compare", help="fail if compile time regressed against a baseline")
+    p = sub.add_parser("compare", help="fail if compile time regressed against a baseline (metrics file or history file)")
     p.add_argument("baseline")
     p.add_argument("current")
     p.add_argument("--max-regression", type=float, default=0.25,
                    help="allowed growth as a fraction (default 0.25 = 25%%)")
     p.add_argument("--min-seconds", type=float, default=5.0,
                    help="ignore growth smaller than this many seconds")
+    p.add_argument("--min-samples", type=int, default=1,
+                   help="with a history file, only fail once this many nights are recorded")
     p.add_argument("--warn-only", action="store_true")
     p.set_defaults(func=_cmd_compare)
+
+    p = sub.add_parser("history", help="append a night's metrics to a rolling history file")
+    p.add_argument("history")
+    p.add_argument("current")
+    p.add_argument("--keep", type=int, default=7)
+    p.set_defaults(func=_cmd_history)
 
     p = sub.add_parser("flaky", help="find tests with mixed results across repeated runs")
     p.add_argument("runs", nargs="+", help="JUnit XML files from repeated ctest runs")
