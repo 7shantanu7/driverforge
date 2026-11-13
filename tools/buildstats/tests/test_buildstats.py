@@ -87,6 +87,41 @@ class CompareTest(unittest.TestCase):
         self.assertTrue(ok)
 
 
+class HistoryTest(unittest.TestCase):
+    def run_cli(self, *argv):
+        with redirect_stdout(io.StringIO()):
+            return cli.main(list(argv))
+
+    def write(self, path, data):
+        path.write_text(json.dumps(data))
+
+    def test_median_ignores_one_slow_night(self):
+        history = [{"cpu_seconds": c} for c in (16, 17, 16, 30, 16)]
+        self.assertEqual(report.baseline_from_history(history)["build"]["cpu_seconds"], 16)
+
+    def test_history_is_trimmed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            hist, cur = Path(tmp) / "h.json", Path(tmp) / "c.json"
+            self.write(cur, {"build": {"cpu_seconds": 10}})
+            for _ in range(5):
+                self.run_cli("history", str(hist), str(cur), "--keep", "3")
+            self.assertEqual(len(json.loads(hist.read_text())), 3)
+
+    def test_few_samples_do_not_fail(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            hist, cur = Path(tmp) / "h.json", Path(tmp) / "c.json"
+            self.write(hist, [{"cpu_seconds": 10}])
+            self.write(cur, {"build": {"cpu_seconds": 100}})
+            self.assertEqual(self.run_cli("compare", str(hist), str(cur), "--min-samples", "3"), 0)
+
+    def test_enough_samples_can_fail(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            hist, cur = Path(tmp) / "h.json", Path(tmp) / "c.json"
+            self.write(hist, [{"cpu_seconds": 100}] * 3)
+            self.write(cur, {"build": {"cpu_seconds": 200}})
+            self.assertEqual(self.run_cli("compare", str(hist), str(cur), "--min-samples", "3"), 1)
+
+
 class CliTest(unittest.TestCase):
     def test_collect_then_markdown(self):
         with tempfile.TemporaryDirectory() as tmp:
