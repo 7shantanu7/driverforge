@@ -42,7 +42,7 @@ jobs:
     name: verify tag, VERSION and changelog
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ env.TAG }}
       - run: scripts/ci/verify_version.sh "$TAG"
@@ -64,11 +64,11 @@ jobs:
       id-token: write        # Sigstore keyless signing for attestations
       attestations: write    # store the provenance attestations
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ env.TAG }}
           fetch-depth: 0
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           pattern: packages-*
           path: dist
@@ -92,7 +92,7 @@ jobs:
 
       - name: Build provenance attestation (SLSA, signed with Sigstore)
         if: env.DRY_RUN != 'true'
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: |
             dist/*.deb
